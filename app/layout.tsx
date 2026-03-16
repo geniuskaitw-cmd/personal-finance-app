@@ -1,16 +1,27 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import { Space_Grotesk, Inter } from 'next/font/google';
+import { Wallet } from 'lucide-react';
+import BottomNav from './components/BottomNav';
 import './globals.css';
-import {
-  Home,
-  CalendarDays,
-  BarChart3,
-  Settings as SettingsIcon,
-} from 'lucide-react';
+
+/* ── Task 2.1: Font Loading ── */
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-space-grotesk',
+  weight: ['300', '400', '500', '600', '700'],
+  display: 'swap',
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  weight: ['300', '400', '500', '600'],
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
-  title: '小管家記帳',
-  description: '家庭記帳與行事曆小管家',
+  title: '私人秘書',
+  description: '家庭記帳與行事曆私人秘書',
 };
 
 export default function RootLayout({
@@ -19,48 +30,30 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="zh-Hant">
-      <body className="min-h-screen" style={{ background: 'var(--background)', color: 'var(--foreground)' }}>
-        <div className="pb-20">{children}</div>
+    <html lang="zh-Hant" className={`${spaceGrotesk.variable} ${inter.variable}`}>
+      <body className="bg-md-background text-md-on-surface min-h-screen">
+        {/* Task 2.4: Background decorative blur circles */}
+        <div className="fixed pointer-events-none -z-10 inset-0 overflow-hidden">
+          <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-md-primary-container/20 blur-[120px] opacity-20" />
+          <div className="absolute -bottom-32 -right-32 w-80 h-80 rounded-full bg-md-secondary-container/20 blur-[100px] opacity-20" />
+        </div>
 
-        {/* 底部導航列 */}
-        <nav className="fixed bottom-0 left-0 right-0 border-t shadow-md" style={{ background: 'var(--card-bg)', borderColor: 'var(--card-border)' }}>
-          <div className="max-w-md mx-auto flex justify-around py-2 text-xs">
-
-            <NavItem href="/today" icon={<Home />} label="記帳" />
-            <NavItem href="/calendar" icon={<CalendarDays />} label="行事曆" />
-            <NavItem href="/stats" icon={<BarChart3 />} label="統計" />
-            <NavItem href="/settings" icon={<SettingsIcon />} label="設定" />
-
+        {/* Task 2.2: Sticky Top App Bar */}
+        <header className="sticky top-0 z-50 bg-md-background/80 backdrop-blur-md border-b border-md-outline-variant/10">
+          <div className="max-w-4xl mx-auto flex items-center gap-3 px-4 py-3">
+            <Wallet className="w-6 h-6 text-md-primary" />
+            <h1 className="font-[family-name:var(--font-headline)] text-lg font-semibold tracking-tight text-md-on-surface">
+              私人秘書
+            </h1>
           </div>
-        </nav>
+        </header>
+
+        {/* Main content with bottom nav clearance */}
+        <div className="pb-24">{children}</div>
+
+        {/* Task 2.3: Bottom Navigation Bar (client component) */}
+        <BottomNav />
       </body>
     </html>
-  );
-}
-
-function NavItem({
-  href,
-  icon,
-  label,
-}: {
-  href: string;
-  icon: React.ReactNode;
-  label: string;
-}) {
-  const isActive = typeof window !== 'undefined' && window.location.pathname === href;
-
-  return (
-    <Link
-      href={href}
-      className="flex flex-col items-center px-5 py-1 rounded-xl transition-all"
-      style={{
-        color: isActive ? 'var(--foreground)' : 'var(--muted)',
-        background: isActive ? 'var(--input-bg)' : 'transparent'
-      }}
-    >
-      <div className="w-5 h-5 mb-1">{icon}</div>
-      <span>{label}</span>
-    </Link>
   );
 }

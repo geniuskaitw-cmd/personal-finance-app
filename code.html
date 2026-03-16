@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Finance Pro - Daily Overview</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-highest": "#303540",
+              "background": "#0e131d",
+              "on-secondary": "#002388",
+              "on-surface-variant": "#bac9cc",
+              "on-tertiary-fixed": "#251a00",
+              "on-tertiary-container": "#6f5500",
+              "tertiary-container": "#fec931",
+              "surface-variant": "#303540",
+              "error-container": "#93000a",
+              "secondary": "#b8c3ff",
+              "tertiary-fixed": "#ffdf96",
+              "on-surface": "#dee2f1",
+              "on-primary": "#00363d",
+              "inverse-primary": "#006875",
+              "inverse-on-surface": "#2c303b",
+              "on-secondary-fixed-variant": "#0035be",
+              "on-primary-fixed": "#001f24",
+              "on-error": "#690005",
+              "tertiary": "#ffeac0",
+              "on-primary-fixed-variant": "#004f58",
+              "surface-container-low": "#171c26",
+              "secondary-fixed": "#dde1ff",
+              "primary-fixed": "#9cf0ff",
+              "tertiary-fixed-dim": "#f3bf26",
+              "primary": "#c3f5ff",
+              "on-secondary-fixed": "#001356",
+              "on-secondary-container": "#c6ceff",
+              "surface": "#0e131d",
+              "inverse-surface": "#dee2f1",
+              "primary-fixed-dim": "#00daf3",
+              "surface-bright": "#343945",
+              "on-error-container": "#ffdad6",
+              "on-tertiary-fixed-variant": "#594400",
+              "surface-container-lowest": "#090e18",
+              "surface-tint": "#00daf3",
+              "on-tertiary": "#3e2e00",
+              "surface-container": "#1b202a",
+              "on-background": "#dee2f1",
+              "on-primary-container": "#00626e",
+              "surface-container-high": "#252a35",
+              "primary-container": "#00e5ff",
+              "error": "#ffb4ab",
+              "outline": "#849396",
+              "surface-dim": "#0e131d",
+              "secondary-fixed-dim": "#b8c3ff",
+              "secondary-container": "#0043eb",
+              "outline-variant": "#3b494c"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0e131d;
+            font-family: 'Inter', sans-serif;
+            color: #dee2f1;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(48, 53, 64, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .kinetic-glow {
+            box-shadow: 0px 20px 40px rgba(0, 218, 243, 0.08);
+        }
+        .primary-gradient {
+            background: linear-gradient(135deg, #c3f5ff 0%, #00e5ff 100%);
+        }
+        .text-glow {
+            text-shadow: 0 0 15px rgba(195, 245, 255, 0.3);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background min-h-screen pb-24">
+<!-- TopAppBar (Shared Component) -->
+<header class="sticky top-0 z-50 px-6 py-4 flex items-center justify-between bg-background/80 backdrop-blur-md">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="account_balance_wallet">account_balance_wallet</span>
+<h1 class="font-headline font-bold text-lg tracking-tight text-on-surface">Finance Pro</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<main class="px-6 space-y-10 max-w-4xl mx-auto mt-6">
+<!-- Hero Section: Total Balance -->
+<section class="relative overflow-hidden pt-4">
+<div class="flex flex-col items-start space-y-2">
+<span class="font-label text-xs uppercase tracking-widest text-on-surface-variant opacity-70">Total Amount</span>
+<div class="flex items-baseline gap-2">
+<span class="font-headline text-5xl md:text-7xl font-bold text-primary text-glow tracking-tighter">$ 0</span>
+<span class="font-headline text-2xl font-light text-primary-fixed-dim opacity-50">.00</span>
+</div>
+</div>
+<!-- Decorative Accent -->
+<div class="absolute -right-20 -top-20 w-64 h-64 primary-gradient opacity-10 rounded-full blur-[100px]"></div>
+</section>
+<!-- Date & Filters Section -->
+<section class="space-y-6">
+<!-- Date Selector -->
+<div class="glass-card rounded-xl p-4 flex items-center justify-between border-l-2 border-primary-fixed-dim/30">
+<button class="p-2 hover:bg-surface-container-highest rounded-full transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="chevron_left">chevron_left</span>
+</button>
+<div class="text-center">
+<h2 class="font-headline text-lg font-medium text-on-surface">2026-03-16 ( Sunday )</h2>
+</div>
+<button class="p-2 hover:bg-surface-container-highest rounded-full transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+<!-- Tabs and Sort -->
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div class="flex bg-surface-container-low p-1 rounded-full border border-outline-variant/10">
+<button class="px-6 py-2 rounded-full font-label text-sm font-medium bg-surface-container-highest text-primary transition-all">Day</button>
+<button class="px-6 py-2 rounded-full font-label text-sm font-medium text-on-surface-variant hover:text-on-surface transition-all">Week</button>
+<button class="px-6 py-2 rounded-full font-label text-sm font-medium text-on-surface-variant hover:text-on-surface transition-all">Month</button>
+</div>
+<div class="relative">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container rounded-lg border border-outline-variant/10 text-sm font-label text-on-surface-variant">
+<span>Time: New -&gt; Old</span>
+<span class="material-symbols-outlined text-xs" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Content Area: Empty State -->
+<section class="flex flex-col items-center justify-center py-20 px-4 space-y-8 glass-card rounded-2xl border border-outline-variant/5 min-h-[400px]">
+<div class="relative">
+<!-- Abstract technical motif -->
+<div class="w-32 h-32 rounded-full border-2 border-dashed border-primary/20 animate-spin-slow"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-16 h-16 glass-card rounded-2xl flex items-center justify-center kinetic-glow rotate-45 border border-primary/20">
+<span class="material-symbols-outlined text-primary-fixed-dim text-4xl -rotate-45" data-icon="analytics" data-weight="fill" style="font-variation-settings: 'FILL' 1;">analytics</span>
+</div>
+</div>
+</div>
+<div class="text-center space-y-3">
+<h3 class="font-headline text-2xl font-semibold text-on-surface tracking-wide">沒有資料</h3>
+<p class="font-body text-on-surface-variant max-w-xs mx-auto text-sm leading-relaxed">
+                    No data available for the selected period. Start by recording your first transaction for today.
+                </p>
+</div>
+<button class="primary-gradient text-on-primary-fixed font-label font-bold px-8 py-3 rounded-full kinetic-glow hover:scale-105 transition-transform flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="add">add</span>
+                ADD TRANSACTION
+            </button>
+</section>
+<!-- Stats Bento Grid (Mini Insight) -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="surface-container-low rounded-2xl p-6 flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="trending_up">trending_up</span>
+</div>
+<div>
+<p class="text-xs font-label text-on-surface-variant">Daily Average</p>
+<p class="font-headline text-xl font-bold">$ 0.00</p>
+</div>
+</div>
+<div class="surface-container-low rounded-2xl p-6 flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-tertiary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary-fixed-dim" data-icon="history">history</span>
+</div>
+<div>
+<p class="text-xs font-label text-on-surface-variant">Last Update</p>
+<p class="font-headline text-xl font-bold">2m ago</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Shared Component) -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-xl border-t border-outline-variant/10 px-4 py-3">
+<div class="max-w-md mx-auto flex items-center justify-between">
+<a class="flex flex-col items-center gap-1 group" href="#">
+<div class="px-5 py-1 rounded-full bg-primary/10 text-primary transition-all">
+<span class="material-symbols-outlined" data-icon="account_balance" data-weight="fill" style="font-variation-settings: 'FILL' 1;">account_balance</span>
+</div>
+<span class="text-[10px] font-medium text-primary">Accounting</span>
+</a>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<div class="px-5 py-1 rounded-full text-on-surface-variant group-hover:bg-surface-container-highest transition-all">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+</div>
+<span class="text-[10px] font-medium text-on-surface-variant">Calendar</span>
+</a>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<div class="px-5 py-1 rounded-full text-on-surface-variant group-hover:bg-surface-container-highest transition-all">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+</div>
+<span class="text-[10px] font-medium text-on-surface-variant">Statistics</span>
+</a>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<div class="px-5 py-1 rounded-full text-on-surface-variant group-hover:bg-surface-container-highest transition-all">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</div>
+<span class="text-[10px] font-medium text-on-surface-variant">Settings</span>
+</a>
+</div>
+</nav>
+<!-- Hidden Background Decor -->
+<div class="fixed top-0 left-0 w-full h-full pointer-events-none -z-10 opacity-20">
+<div class="absolute top-[10%] left-[5%] w-[40vw] h-[40vw] rounded-full bg-primary-container/20 blur-[120px]"></div>
+<div class="absolute bottom-[20%] right-[10%] w-[30vw] h-[30vw] rounded-full bg-secondary-container/20 blur-[100px]"></div>
+</div>
+<style>
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin-slow 12s linear infinite;
+        }
+    </style>
+</body></html>

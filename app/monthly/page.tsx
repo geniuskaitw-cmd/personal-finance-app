@@ -153,38 +153,38 @@ export default function MonthlyPage() {
    * helper：金額顏色
    * ----------------------------- */
   function amountColor(n: number) {
-    if (n > 0) return 'text-green-600';
-    if (n < 0) return 'text-red-500';
-    return 'text-gray-400';
+    if (n > 0) return 'text-green-500';
+    if (n < 0) return 'text-md-error';
+    return 'text-md-on-surface-variant';
   }
 
+  const remaining = budget - monthTotal;
+
   return (
-    <div className="p-4 max-w-md mx-auto" style={{ background: 'var(--page-bg)' }}>
-      {/* 年月 + 上下月切換 */}
-      <div className="flex justify-between items-center mb-6">
+    <div className="p-4 max-w-4xl mx-auto">
+      {/* 年月 + 上下月切換 — Glass Card */}
+      <div className="glass-card p-3 flex items-center justify-between mb-6">
         <button
           onClick={prevMonth}
-          className="p-3 border rounded-full shadow-sm"
-          style={{ background: 'var(--card-bg)', borderColor: 'var(--card-border)', color: 'var(--foreground)' }}
+          className="p-3 hover:bg-md-surface-container-highest rounded-full transition-colors"
         >
-          <ChevronLeft className="w-6 h-6 stroke-[3]" />
+          <ChevronLeft className="w-6 h-6 stroke-[3] text-md-primary" />
         </button>
 
-        <div className="text-xl font-bold" style={{ color: 'var(--foreground)' }}>
+        <div className="font-[family-name:var(--font-headline)] text-xl font-bold text-md-on-surface">
           {current.year} 年 {current.month + 1} 月
         </div>
 
         <button
           onClick={nextMonth}
-          className="p-3 border rounded-full shadow-sm"
-          style={{ background: 'var(--card-bg)', borderColor: 'var(--card-border)', color: 'var(--foreground)' }}
+          className="p-3 hover:bg-md-surface-container-highest rounded-full transition-colors"
         >
-          <ChevronRight className="w-6 h-6 stroke-[3]" />
+          <ChevronRight className="w-6 h-6 stroke-[3] text-md-primary" />
         </button>
       </div>
 
       {/* 星期列 */}
-      <div className="grid grid-cols-7 text-center text-sm font-semibold mb-2" style={{ color: 'var(--muted)' }}>
+      <div className="grid grid-cols-7 text-center text-xs font-semibold mb-2 text-md-on-surface-variant uppercase tracking-widest">
         <div>一</div>
         <div>二</div>
         <div>三</div>
@@ -201,8 +201,7 @@ export default function MonthlyPage() {
             return (
               <div
                 key={idx}
-                className="h-12 border rounded-lg shadow-sm"
-                style={{ background: 'var(--input-bg)', borderColor: 'var(--card-border)' }}
+                className="h-12 bg-md-surface-container-low rounded-xl"
               ></div>
             );
           }
@@ -223,20 +222,18 @@ export default function MonthlyPage() {
             <Link
               key={idx}
               href={`/today?date=${dateStr}`}
-              className={`h-12 flex flex-col items-center justify-center border rounded-lg shadow-sm
+              className={`h-12 flex flex-col items-center justify-center rounded-xl transition-colors
                 ${isToday
-                  ? 'bg-blue-600 border-blue-700 text-white font-bold'
-                  : ''
+                  ? 'bg-md-primary-container text-md-on-primary font-bold'
+                  : 'bg-md-surface-container-high text-md-on-surface'
                 }
               `}
-              style={isToday ? {} : { background: 'var(--card-bg)', borderColor: 'var(--card-border)', color: 'var(--foreground)' }}
             >
               <div className="leading-none">{day}</div>
 
               {sum !== 0 && (
                 <div
-                  className={`text-[10px] leading-none mt-0.5 ${isToday ? 'text-white' : amountColor(sum)
-                    }`}
+                  className={`text-[10px] leading-none mt-0.5 ${isToday ? 'text-md-on-primary' : amountColor(sum)}`}
                 >
                   {sum.toLocaleString()}
                 </div>
@@ -246,28 +243,24 @@ export default function MonthlyPage() {
         })}
       </div>
 
-      {/* 底部三欄 */}
-      <div className="mt-6 p-4 shadow-sm border rounded-lg text-sm space-y-2" style={{ background: 'var(--card-bg)', borderColor: 'var(--card-border)' }}>
-        <div className="flex justify-between">
-          <span style={{ color: 'var(--muted)' }}>本月預算</span>
-          <span className="font-semibold" style={{ color: 'var(--foreground)' }}>{(budget || 0).toLocaleString()}</span>
+      {/* 底部統計 — Glass Card + Bento Grid */}
+      <div className="mt-6 grid grid-cols-3 gap-3">
+        <div className="glass-card p-4 flex flex-col items-center">
+          <span className="text-xs text-md-on-surface-variant mb-1">本月預算</span>
+          <span className="font-[family-name:var(--font-headline)] text-lg font-bold text-md-on-surface">
+            {(budget || 0).toLocaleString()}
+          </span>
         </div>
-
-        <div className="flex justify-between">
-          <span style={{ color: 'var(--muted)' }}>目前花費</span>
-          <span className={`font-semibold ${amountColor(monthTotal)}`}>
+        <div className="glass-card p-4 flex flex-col items-center">
+          <span className="text-xs text-md-on-surface-variant mb-1">目前花費</span>
+          <span className={`font-[family-name:var(--font-headline)] text-lg font-bold ${amountColor(monthTotal)}`}>
             {monthTotal.toLocaleString()}
           </span>
         </div>
-
-        <div className="flex justify-between">
-          <span style={{ color: 'var(--muted)' }}>剩餘金額</span>
-          <span
-            className={`font-bold ${budget - monthTotal < 0 ? 'text-red-600' : ''
-              }`}
-            style={budget - monthTotal >= 0 ? { color: 'var(--foreground)' } : {}}
-          >
-            {(budget - monthTotal).toLocaleString()}
+        <div className="glass-card p-4 flex flex-col items-center">
+          <span className="text-xs text-md-on-surface-variant mb-1">剩餘金額</span>
+          <span className={`font-[family-name:var(--font-headline)] text-lg font-bold ${remaining < 0 ? 'text-md-error' : 'text-md-on-surface'}`}>
+            {remaining.toLocaleString()}
           </span>
         </div>
       </div>

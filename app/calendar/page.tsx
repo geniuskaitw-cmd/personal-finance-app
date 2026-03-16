@@ -239,22 +239,22 @@ export default function CalendarPage() {
 
     return (
       <div className="pb-20 space-y-4" ref={listRef}>
-        {/* 今天狀態區塊 */}
-        <div className="p-4 rounded-xl border" style={{ background: 'var(--card-bg)', borderColor: 'var(--card-border)' }}>
-          <h2 className="text-lg font-bold mb-2" style={{ color: 'var(--foreground)' }}>
+        {/* 今天狀態區塊 — Glass Card (4.2) */}
+        <div className="glass-card p-4">
+          <h2 className="font-[family-name:var(--font-headline)] text-lg font-bold mb-2 text-md-on-surface">
             今天是 {todayStr}
           </h2>
           {todayEvents.length > 0 ? (
-            <div style={{ color: 'var(--muted)' }}>
+            <div className="text-md-on-surface-variant">
               今日有 {todayEvents.length} 個行程
             </div>
           ) : (
-            <div style={{ color: 'var(--muted)' }}>本日無行程</div>
+            <div className="text-md-on-surface-variant">本日無行程</div>
           )}
         </div>
 
         {sortedEvents.length === 0 && (
-          <div className="text-center py-10" style={{ color: 'var(--muted)' }}>尚無任何行程記錄</div>
+          <div className="text-center py-10 text-md-on-surface-variant">尚無任何行程記錄</div>
         )}
 
         {sortedEvents.map((evt) => {
@@ -274,57 +274,49 @@ export default function CalendarPage() {
                 e.preventDefault();
                 handleOpenAction(evt);
               }}
-              className={`relative p-5 rounded-2xl border shadow-sm flex flex-col justify-between min-h-[120px] transition-all select-none
-                        ${isToday ? 'ring-1 ring-blue-500' : ''}
+              className={`relative p-5 glass-card kinetic-glow flex flex-col justify-between min-h-[120px] transition-all select-none
+                        ${isToday ? 'ring-1 ring-md-primary' : ''}
                         ${isPast ? 'opacity-60 grayscale-[0.5]' : ''}
                     `}
-              style={{
-                background: isToday ? 'var(--input-bg)' : 'var(--card-bg)',
-                borderColor: isToday ? '#3b82f6' : 'var(--card-border)'
-              }}
             >
-              {/* 右上角更多按鈕 (絕對定位以免破壞版面) */}
+              {/* 右上角更多按鈕 */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   handleOpenAction(evt);
                 }}
-                className="absolute top-2 right-2 p-1 rounded-full z-10"
-                style={{ color: 'var(--muted-foreground)' }}
+                className="absolute top-2 right-2 p-1 rounded-full z-10 text-md-on-surface-variant"
               >
                 <MoreVertical className="w-5 h-5" />
               </button>
 
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between items-start pr-8">
-                  <div className="text-xl font-bold" style={{ color: isToday ? '#3b82f6' : 'var(--foreground)' }}>
+                  <div className={`text-xl font-bold ${isToday ? 'text-md-primary' : 'text-md-on-surface'}`}>
                     {evt.date}
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <div
-                    className="flex items-center px-2 py-1 rounded-lg text-lg font-bold"
-                    style={{
-                      background: isToday ? 'rgba(59, 130, 246, 0.2)' : 'var(--input-bg)',
-                      color: isToday ? '#3b82f6' : 'var(--muted)'
-                    }}
+                    className={`flex items-center px-2 py-1 rounded-lg text-lg font-bold
+                      ${isToday ? 'bg-md-primary/20 text-md-primary' : 'bg-md-surface-container-highest text-md-on-surface-variant'}`}
                   >
                     <Clock className="w-5 h-5 mr-1.5" />
                     {evt.time ? evt.time.slice(0, 5) : '全天'}
                   </div>
                 </div>
 
-                <div className="text-xl font-bold leading-relaxed mt-1" style={{ color: 'var(--foreground)' }}>
+                <div className="text-xl font-bold leading-relaxed mt-1 text-md-on-surface">
                   {evt.title || '(無標題)'}
                 </div>
               </div>
 
-              <div className="flex justify-between items-end mt-4 pt-3 border-t" style={{ borderColor: 'var(--card-border)' }}>
-                <span className="text-sm font-medium break-all mr-2" style={{ color: 'var(--muted)' }}>
+              <div className="flex justify-between items-end mt-4 pt-3 border-t border-md-outline-variant/10">
+                <span className="text-sm font-medium break-all mr-2 text-md-on-surface-variant">
                   {evt.note}
                 </span>
-                <span className="text-sm font-medium whitespace-nowrap" style={{ color: 'var(--muted-foreground)' }}>
+                <span className="text-sm font-medium whitespace-nowrap text-md-on-surface-variant">
                   {userName}
                 </span>
               </div>
@@ -359,43 +351,41 @@ export default function CalendarPage() {
 
     return (
       <div>
-        {/* 月曆 Header */}
-        <div className="flex items-center justify-between mb-2 p-2 rounded-xl shadow-sm" style={{ background: 'var(--card-bg)' }}>
+        {/* 月曆 Header — Glass Card */}
+        <div className="glass-card flex items-center justify-between mb-2 p-2">
           <button
             onClick={() => setCurrentDate(new Date(year, month - 1, 1))}
-            className="p-2 rounded-full"
-            style={{ color: 'var(--foreground)' }}
+            className="p-2 hover:bg-md-surface-container-highest rounded-full transition-colors"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-5 h-5 text-md-on-surface" />
           </button>
-          <div className="font-bold text-lg" style={{ color: 'var(--foreground)' }}>
+          <div className="font-[family-name:var(--font-headline)] text-lg font-bold text-md-on-surface">
             {year} 年 {month + 1} 月
           </div>
           <button
             onClick={() => setCurrentDate(new Date(year, month + 1, 1))}
-            className="p-2 rounded-full"
-            style={{ color: 'var(--foreground)' }}
+            className="p-2 hover:bg-md-surface-container-highest rounded-full transition-colors"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-5 h-5 text-md-on-surface" />
           </button>
         </div>
 
         {/* 星期 Header */}
-        <div className="grid grid-cols-7 text-center mb-1 font-semibold text-sm" style={{ color: 'var(--muted)' }}>
-          <div className="text-red-500">日</div>
+        <div className="grid grid-cols-7 text-center mb-1 font-semibold text-sm text-md-on-surface-variant">
+          <div className="text-md-error">日</div>
           <div>一</div>
           <div>二</div>
           <div>三</div>
           <div>四</div>
           <div>五</div>
-          <div className="text-green-600">六</div>
+          <div className="text-green-500">六</div>
         </div>
 
-        {/* 格子 */}
+        {/* 格子 — (4.3) bg-md-surface-container rounded-xl + (4.4) holiday styling */}
         <div className="grid grid-cols-7 gap-0.5">
           {cells.map((cell: any) => {
             if (cell.type === 'empty') {
-              return <div key={cell.key} className="h-14" />;
+              return <div key={cell.key} className="h-14 bg-md-surface-container-low rounded-xl" />;
             }
 
             const dayEvents = events.filter(e => e.date === cell.dateStr);
@@ -406,27 +396,24 @@ export default function CalendarPage() {
               <div
                 key={cell.key}
                 onClick={() => goToListAndScroll(cell.dateStr)}
-                className={`h-14 border rounded-lg flex flex-col items-center justify-start pt-1 cursor-pointer relative overflow-hidden transition-all
-                            ${isToday ? 'ring-2 ring-blue-500' : ''}
+                className={`h-14 rounded-xl flex flex-col items-center justify-start pt-1 cursor-pointer relative overflow-hidden transition-all
+                            ${isToday ? 'ring-2 ring-md-primary' : ''}
+                            ${isHoliday ? 'bg-md-error/10 border border-md-error/20' : 'bg-md-surface-container'}
                         `}
-                style={{
-                  background: isHoliday ? 'rgba(239, 68, 68, 0.1)' : 'var(--card-bg)',
-                  borderColor: isHoliday ? 'rgba(239, 68, 68, 0.2)' : 'var(--card-border)'
-                }}
               >
-                <span className="text-sm font-medium" style={{ color: isHoliday ? '#ef4444' : 'var(--foreground)' }}>
+                <span className={`text-sm font-medium ${isHoliday ? 'text-md-error' : 'text-md-on-surface'}`}>
                   {cell.val}
                 </span>
 
                 {isHoliday && (
-                  <span className="text-[9px] text-red-400 transform scale-90 truncate max-w-full">
+                  <span className="text-[9px] text-md-error transform scale-90 truncate max-w-full">
                     {holidays[cell.dateStr].name}
                   </span>
                 )}
 
                 <div className="flex gap-0.5 mt-auto mb-1 flex-wrap justify-center px-0.5">
                   {dayEvents.map((_, i) => (
-                    <div key={i} className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                    <div key={i} className="w-1.5 h-1.5 rounded-full bg-md-primary" />
                   ))}
                 </div>
               </div>
@@ -459,32 +446,40 @@ export default function CalendarPage() {
 
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: 'var(--page-bg)' }}>
-      <div className="p-4 max-w-md mx-auto w-full flex-1 flex flex-col">
+    <div className="min-h-screen flex flex-col bg-md-background">
+      {/* 4.5: max-w-4xl instead of max-w-md */}
+      <div className="p-4 pb-20 max-w-4xl mx-auto w-full flex-1 flex flex-col space-y-4">
 
-        {/* 頂部切換按鈕 */}
-        <div className="flex justify-end mb-4">
-          <button
-            onClick={() => setViewMode(viewMode === 'list' ? 'month' : 'list')}
-            className="flex items-center gap-2 px-4 py-2 border rounded-full shadow-sm text-sm font-medium"
-            style={{ background: 'var(--card-bg)', borderColor: 'var(--card-border)', color: 'var(--foreground)' }}
-          >
-            {viewMode === 'list' ? (
-              <>
-                <CalendarDays className="w-4 h-4" />
-                切換月曆模式
-              </>
-            ) : (
-              <>
-                <List className="w-4 h-4" />
-                切換列表模式
-              </>
-            )}
-          </button>
+        {/* 4.1: Pill Tab 風格切換按鈕 */}
+        <div className="flex justify-center">
+          <div className="flex bg-md-surface-container-low p-1 rounded-full border border-md-outline-variant/10">
+            <button
+              onClick={() => setViewMode('month')}
+              className={`px-6 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2
+                ${viewMode === 'month'
+                  ? 'bg-md-surface-container-highest text-md-primary'
+                  : 'text-md-on-surface-variant hover:text-md-on-surface'
+                }`}
+            >
+              <CalendarDays className="w-4 h-4" />
+              月曆
+            </button>
+            <button
+              onClick={() => setViewMode('list')}
+              className={`px-6 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2
+                ${viewMode === 'list'
+                  ? 'bg-md-surface-container-highest text-md-primary'
+                  : 'text-md-on-surface-variant hover:text-md-on-surface'
+                }`}
+            >
+              <List className="w-4 h-4" />
+              列表
+            </button>
+          </div>
         </div>
 
         {loading ? (
-          <div className="flex-1 flex items-center justify-center" style={{ color: 'var(--muted)' }}>
+          <div className="flex-1 flex items-center justify-center text-md-on-surface-variant">
             載入行程中...
           </div>
         ) : (
@@ -495,23 +490,23 @@ export default function CalendarPage() {
         )}
       </div>
 
-      {/* ----------- Modals (移到最外層) ----------- */}
+      {/* ----------- Modals — Glass Card + backdrop-blur-sm ----------- */}
 
       {/* 動作選單 */}
       {showActionMenu && actionItem && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={closeAllModals}>
-          <div className="w-full max-w-sm rounded-2xl overflow-hidden shadow-xl animate-in slide-in-from-bottom-10 fade-in duration-200" style={{ background: 'var(--card-bg)' }} onClick={e => e.stopPropagation()}>
-            <div className="p-4 border-b text-center font-bold" style={{ borderColor: 'var(--card-border)', color: 'var(--foreground)' }}>選擇操作</div>
+          <div className="w-full max-w-sm glass-card rounded-2xl overflow-hidden shadow-xl animate-in slide-in-from-bottom-10 fade-in duration-200" onClick={e => e.stopPropagation()}>
+            <div className="p-4 border-b border-md-outline-variant/10 text-center font-bold text-md-on-surface">選擇操作</div>
             <div className="flex flex-col">
-              <button onClick={onClickEdit} className="flex items-center justify-center gap-2 p-4 border-b text-blue-500 font-medium" style={{ borderColor: 'var(--card-border)' }}>
+              <button onClick={onClickEdit} className="flex items-center justify-center gap-2 p-4 border-b border-md-outline-variant/10 text-md-primary font-medium">
                 <Edit className="w-5 h-5" /> 編輯行程
               </button>
-              <button onClick={onClickDelete} className="flex items-center justify-center gap-2 p-4 text-red-500 font-medium">
+              <button onClick={onClickDelete} className="flex items-center justify-center gap-2 p-4 text-md-error font-medium">
                 <Trash2 className="w-5 h-5" /> 刪除行程
               </button>
             </div>
-            <div className="p-2" style={{ background: 'var(--input-bg)' }}>
-              <button onClick={closeAllModals} className="w-full py-3 rounded-xl border shadow-sm font-bold" style={{ background: 'var(--card-bg)', borderColor: 'var(--card-border)', color: 'var(--foreground)' }}>
+            <div className="p-2 bg-md-surface-container">
+              <button onClick={closeAllModals} className="w-full py-3 rounded-xl border border-md-outline-variant font-bold text-md-on-surface glass-card">
                 取消
               </button>
             </div>
@@ -522,11 +517,14 @@ export default function CalendarPage() {
       {/* 刪除確認 */}
       {showDeleteConfirm && actionItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-6">
-          <div className="w-full max-w-sm rounded-2xl p-6 shadow-xl" style={{ background: 'var(--card-bg)' }}>
-            <h3 className="text-lg font-bold mb-2" style={{ color: 'var(--foreground)' }}>確定要刪除嗎？</h3>
-            <div className="flex gap-3 mt-6">
-              <button onClick={closeAllModals} className="flex-1 py-2.5 border rounded-xl font-medium" style={{ borderColor: 'var(--card-border)', color: 'var(--foreground)' }}>取消</button>
-              <button onClick={doDelete} className="flex-1 py-2.5 bg-red-600 text-white rounded-xl font-medium hover:bg-red-700">確定刪除</button>
+          <div className="w-full max-w-sm glass-card rounded-2xl p-6 shadow-xl">
+            <h3 className="text-lg font-bold mb-2 text-md-on-surface">確定要刪除嗎？</h3>
+            <p className="mb-6 text-md-on-surface-variant">
+              此動作無法復原，該筆行程將會永久刪除。
+            </p>
+            <div className="flex gap-3">
+              <button onClick={closeAllModals} className="flex-1 py-2.5 border border-md-outline-variant rounded-xl font-medium text-md-on-surface">取消</button>
+              <button onClick={doDelete} className="flex-1 py-2.5 bg-md-error text-md-on-error rounded-xl font-medium hover:opacity-90">確定刪除</button>
             </div>
           </div>
         </div>
@@ -535,46 +533,43 @@ export default function CalendarPage() {
       {/* 編輯視窗 */}
       {showEditModal && actionItem && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm sm:p-6">
-          <div className="w-full max-w-md sm:rounded-2xl rounded-t-2xl p-5 shadow-xl h-[70vh] sm:h-auto flex flex-col" style={{ background: 'var(--card-bg)' }}>
+          <div className="w-full max-w-md sm:rounded-2xl rounded-t-2xl p-5 shadow-xl h-[70vh] sm:h-auto flex flex-col glass-card">
             <div className="flex justify-between items-center mb-5">
-              <h3 className="text-xl font-bold" style={{ color: 'var(--foreground)' }}>編輯行程</h3>
-              <button onClick={closeAllModals} className="p-1 rounded-full" style={{ color: 'var(--muted)' }}><X className="w-6 h-6" /></button>
+              <h3 className="text-xl font-bold text-md-on-surface">編輯行程</h3>
+              <button onClick={closeAllModals} className="p-1 rounded-full text-md-on-surface-variant"><X className="w-6 h-6" /></button>
             </div>
             <div className="flex-1 overflow-y-auto space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1" style={{ color: 'var(--muted)' }}>日期</label>
+                <label className="block text-sm font-medium mb-1 text-md-on-surface-variant">日期</label>
                 <input
                   type="date"
                   value={editForm.date}
                   onChange={e => setEditForm({ ...editForm, date: e.target.value })}
-                  className="w-full p-3 border rounded-xl outline-none ring-2 ring-transparent focus:ring-blue-500 transition-all min-w-0 appearance-none"
-                  style={{ background: 'var(--input-bg)', borderColor: 'var(--input-border)', color: 'var(--input-text)' }}
+                  className="w-full p-3 bg-md-surface-container border border-md-outline-variant/10 rounded-xl text-md-on-surface outline-none ring-2 ring-transparent focus:ring-md-primary transition-all min-w-0 appearance-none"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1" style={{ color: 'var(--muted)' }}>時間 (選填)</label>
+                <label className="block text-sm font-medium mb-1 text-md-on-surface-variant">時間 (選填)</label>
                 <input
                   type="time"
                   value={editForm.time}
                   onChange={e => setEditForm({ ...editForm, time: e.target.value })}
-                  className="w-full p-3 border rounded-xl outline-none ring-2 ring-transparent focus:ring-blue-500 transition-all min-w-0 appearance-none"
-                  style={{ background: 'var(--input-bg)', borderColor: 'var(--input-border)', color: 'var(--input-text)' }}
+                  className="w-full p-3 bg-md-surface-container border border-md-outline-variant/10 rounded-xl text-md-on-surface outline-none ring-2 ring-transparent focus:ring-md-primary transition-all min-w-0 appearance-none"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1" style={{ color: 'var(--muted)' }}>項目 (標題)</label>
+                <label className="block text-sm font-medium mb-1 text-md-on-surface-variant">項目 (標題)</label>
                 <input
                   type="text"
                   value={editForm.title}
                   onChange={e => setEditForm({ ...editForm, title: e.target.value })}
-                  className="w-full p-3 border rounded-xl outline-none ring-2 ring-transparent focus:ring-blue-500 transition-all"
-                  style={{ background: 'var(--input-bg)', borderColor: 'var(--input-border)', color: 'var(--input-text)' }}
+                  className="w-full p-3 bg-md-surface-container border border-md-outline-variant/10 rounded-xl text-md-on-surface outline-none ring-2 ring-transparent focus:ring-md-primary transition-all"
                 />
               </div>
             </div>
-            <div className="flex gap-3 mt-6 pt-4 border-t" style={{ borderColor: 'var(--card-border)' }}>
-              <button onClick={closeAllModals} className="flex-1 py-3 border rounded-xl font-medium" style={{ borderColor: 'var(--card-border)', color: 'var(--foreground)' }}>取消</button>
-              <button onClick={doUpdate} className="flex-1 py-3 bg-blue-600 text-white rounded-xl font-bold flex items-center justify-center gap-2"><Check className="w-5 h-5" /> 儲存變更</button>
+            <div className="flex gap-3 mt-6 pt-4 border-t border-md-outline-variant/10">
+              <button onClick={closeAllModals} className="flex-1 py-3 border border-md-outline-variant rounded-xl font-medium text-md-on-surface">取消</button>
+              <button onClick={doUpdate} className="flex-1 py-3 primary-gradient text-md-on-primary rounded-full font-bold kinetic-glow active:scale-[0.98] transition-transform flex items-center justify-center gap-2"><Check className="w-5 h-5" /> 儲存變更</button>
             </div>
           </div>
         </div>

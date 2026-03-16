@@ -80,7 +80,7 @@ type CategoryStat = {
 };
 
 /** --------------------------------------------------------
- * Donut Chart Component (SVG Path)
+ * Donut Chart Component (SVG Path) — 6.1 styling updates
  * -------------------------------------------------------- */
 function DonutChart({ data, total }: { data: CategoryStat[], total: number }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -111,11 +111,6 @@ function DonutChart({ data, total }: { data: CategoryStat[], total: number }) {
     const [endX, endY] = getCoordinatesForPercent(endPercent);
     const largeArcFlag = slice.percentage / 100 > 0.5 ? 1 : 0;
 
-    // Create an SVG path
-    // M 0 0 L startX startY A 1 1 0 largeArcFlag 1 endX endY Z (Pie)
-    // We want Donut, so we'll mask center or stroke? 
-    // Better to use thick stroke on a path.
-    // Path for stroke: M startX startY A 1 1 0 largeArcFlag 1 endX endY
     const pathData = `M ${startX} ${startY} A 1 1 0 ${largeArcFlag} 1 ${endX} ${endY}`;
 
     return { ...slice, pathData, index };
@@ -126,14 +121,14 @@ function DonutChart({ data, total }: { data: CategoryStat[], total: number }) {
   const centerLabel = activeItem ? activeItem.category : "總支出";
   const centerValue = activeItem
     ? `${activeItem.percentage.toFixed(1)}%`
-    : `$${total.toLocaleString()}`;
-  const centerSubValue = activeItem ? `$${activeItem.total.toLocaleString()}` : "";
+    : `${total.toLocaleString()}`;
+  const centerSubValue = activeItem ? `${activeItem.total.toLocaleString()}` : "";
 
   if (total === 0) {
     return (
       <div className="relative w-52 h-52 mx-auto flex items-center justify-center">
-        <div className="absolute inset-0 rounded-full border-[16px]" style={{ borderColor: 'var(--input-bg)' }}></div>
-        <div className="text-sm" style={{ color: 'var(--muted)' }}>本月無支出</div>
+        <div className="absolute inset-0 rounded-full border-[16px] border-md-surface-container-highest"></div>
+        <div className="text-sm text-md-on-surface-variant">本月無支出</div>
       </div>
     );
   }
@@ -147,7 +142,7 @@ function DonutChart({ data, total }: { data: CategoryStat[], total: number }) {
             d={slice.pathData}
             fill="transparent"
             stroke={slice.color}
-            strokeWidth="0.25" // Thickness of the donut ring
+            strokeWidth="0.25"
             className={`cursor-pointer transition-all duration-200 hover:opacity-90 ${activeIndex === slice.index ? 'opacity-100 stroke-[0.28]' : 'opacity-100'}`}
             onClick={() => setActiveIndex(slice.index === activeIndex ? null : slice.index)}
           />
@@ -158,10 +153,10 @@ function DonutChart({ data, total }: { data: CategoryStat[], total: number }) {
       <div
         className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
       >
-        <div className="text-sm font-medium mb-1" style={{ color: 'var(--muted)' }}>{centerLabel}</div>
-        <div className="text-2xl font-bold" style={{ color: 'var(--foreground)' }}>{centerValue}</div>
+        <div className="text-sm font-medium mb-1 text-md-on-surface-variant">{centerLabel}</div>
+        <div className="text-2xl font-bold text-md-on-surface">{centerValue}</div>
         {centerSubValue && (
-          <div className="text-sm font-medium mt-1" style={{ color: 'var(--muted)' }}>{centerSubValue}</div>
+          <div className="text-sm font-medium mt-1 text-md-on-surface-variant">{centerSubValue}</div>
         )}
       </div>
 
@@ -177,14 +172,14 @@ function DonutChart({ data, total }: { data: CategoryStat[], total: number }) {
 }
 
 /** --------------------------------------------------------
- * Trend Chart Component
+ * Trend Chart Component — styling updates
  * -------------------------------------------------------- */
 function TrendChart({ data, category }: { data: { month: string, total: number }[], category: string }) {
   const max = Math.max(...data.map(d => d.total), 1);
   const color = getCategoryColor(category);
   const [activeBar, setActiveBar] = useState<number | null>(null);
 
-  if (data.length === 0) return <div className="h-48 flex items-center justify-center" style={{ color: 'var(--muted)' }}>無資料</div>;
+  if (data.length === 0) return <div className="h-48 flex items-center justify-center text-md-on-surface-variant">無資料</div>;
 
   return (
     <div className="w-full overflow-x-auto pb-2 touch-pan-x no-scrollbar">
@@ -203,24 +198,18 @@ function TrendChart({ data, category }: { data: { month: string, total: number }
               {/* Bar Plot Area with fixed height */}
               <div className="h-32 w-full flex items-end justify-center relative">
                 <div
-                  className="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-mono whitespace-nowrap pointer-events-none transition-opacity"
-                  style={{
-                    opacity: isActive ? 1 : undefined,
-                    color: 'var(--foreground)',
-                    fontWeight: isActive ? 'bold' : 'normal'
-                  }}
+                  className={`absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-mono whitespace-nowrap pointer-events-none transition-opacity text-md-on-surface ${isActive ? 'opacity-100 font-bold' : ''}`}
                 >
                   ${item.total.toLocaleString()}
                 </div>
                 <div
-                  className={`w-full rounded-t-md transition-all duration-500 relative min-h-[4px] ${isActive ? 'opacity-100 ring-2 ring-offset-1' : 'hover:opacity-80'}`}
-                  style={{ height: `${heightPercent}%`, backgroundColor: color, '--tw-ring-color': 'var(--card-border)' } as React.CSSProperties}
+                  className={`w-full rounded-t-md transition-all duration-500 relative min-h-[4px] ${isActive ? 'opacity-100 ring-2 ring-offset-1 ring-md-outline-variant' : 'hover:opacity-80'}`}
+                  style={{ height: `${heightPercent}%`, backgroundColor: color }}
                 >
                 </div>
               </div>
               <div
-                className="text-[10px] font-medium whitespace-nowrap"
-                style={{ color: isActive ? 'var(--foreground)' : 'var(--muted)', fontWeight: isActive ? 'bold' : 'normal' }}
+                className={`text-[10px] whitespace-nowrap ${isActive ? 'text-md-on-surface font-bold' : 'text-md-on-surface-variant font-medium'}`}
               >
                 {item.month.slice(5)}
               </div>
@@ -404,40 +393,39 @@ export default function StatsPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: 'var(--page-bg)' }}>
-      <div className="p-4 max-w-md mx-auto w-full flex-1 flex flex-col">
+    <div className="min-h-screen flex flex-col bg-md-background">
+      <div className="p-4 max-w-4xl mx-auto w-full flex-1 flex flex-col">
 
-        {/* 標題與月份切換 */}
-        <div className="flex justify-between items-center mb-6">
-          <button onClick={prevMonth} className="p-3 border rounded-full shadow-sm" style={{ background: 'var(--card-bg)', borderColor: 'var(--card-border)', color: 'var(--foreground)' }}>
-            <ChevronLeft className="w-6 h-6 stroke-[3]" />
+        {/* 標題與月份切換 — Glass Card month switcher */}
+        <div className="glass-card p-3 flex items-center justify-between mb-6">
+          <button onClick={prevMonth} className="p-3 hover:bg-md-surface-container-highest rounded-full transition-colors">
+            <ChevronLeft className="w-6 h-6 stroke-[3] text-md-primary" />
           </button>
-          <div className="text-xl font-bold" style={{ color: 'var(--foreground)' }}>
+          <div className="font-[family-name:var(--font-headline)] text-xl font-bold text-md-on-surface">
             {currentMonth.getFullYear()} 年 {currentMonth.getMonth() + 1} 月
           </div>
-          <button onClick={nextMonth} className="p-3 border rounded-full shadow-sm" style={{ background: 'var(--card-bg)', borderColor: 'var(--card-border)', color: 'var(--foreground)' }}>
-            <ChevronRight className="w-6 h-6 stroke-[3]" />
+          <button onClick={nextMonth} className="p-3 hover:bg-md-surface-container-highest rounded-full transition-colors">
+            <ChevronRight className="w-6 h-6 stroke-[3] text-md-primary" />
           </button>
         </div>
 
-        {/* 圓餅圖 */}
-        <div className="p-6 rounded-2xl shadow-sm mb-6 flex justify-center" style={{ background: 'var(--card-bg)' }}>
+        {/* 圓餅圖 — 6.1 Glass Card + Kinetic Glow */}
+        <div className="glass-card kinetic-glow p-6 mb-6 flex justify-center">
           <DonutChart data={stats} total={monthTotal} />
         </div>
 
-        {/* 分類列表 */}
+        {/* 分類列表 — 6.2 Glass Card + 6.3 Progress bar */}
         <div className="space-y-3 pb-20">
           {loading ? (
-            <div className="text-center py-10" style={{ color: 'var(--muted)' }}>計算中...</div>
+            <div className="text-center py-10 text-md-on-surface-variant">計算中...</div>
           ) : stats.length === 0 ? (
-            <div className="text-center py-10" style={{ color: 'var(--muted)' }}>本月尚無資料</div>
+            <div className="text-center py-10 text-md-on-surface-variant">本月尚無資料</div>
           ) : (
             stats.map((stat) => (
               <div
                 key={stat.category}
                 onClick={() => setSelectedCategory(stat.category)}
-                className="p-4 rounded-xl shadow-sm border flex items-center gap-4 cursor-pointer active:scale-[0.98] transition-all"
-                style={{ background: 'var(--card-bg)', borderColor: 'var(--card-border)' }}
+                className="glass-card p-4 flex items-center gap-4 cursor-pointer active:scale-[0.98] transition-all"
               >
                 {/* Icon */}
                 <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: stat.color + '20', color: stat.color }}>
@@ -447,52 +435,52 @@ export default function StatsPage() {
                 {/* Info */}
                 <div className="flex-1">
                   <div className="flex justify-between items-end mb-1">
-                    <div className="font-bold" style={{ color: 'var(--foreground)' }}>{stat.category}</div>
-                    <div className="font-bold" style={{ color: 'var(--foreground)' }}>${stat.total.toLocaleString()}</div>
+                    <div className="text-md-on-surface font-bold">{stat.category}</div>
+                    <div className="text-md-on-surface font-bold">${stat.total.toLocaleString()}</div>
                   </div>
 
-                  {/* Progress Bar */}
+                  {/* Progress Bar — 6.3 bg-md-surface-container-low */}
                   <div className="flex items-center gap-2">
-                    <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'var(--input-bg)' }}>
+                    <div className="flex-1 h-2 rounded-full overflow-hidden bg-md-surface-container-low">
                       <div
                         className="h-full rounded-full"
                         style={{ width: `${stat.percentage}%`, backgroundColor: stat.color }}
                       />
                     </div>
-                    <div className="text-xs w-10 text-right" style={{ color: 'var(--muted-foreground)' }}>{stat.percentage.toFixed(1)}%</div>
+                    <div className="text-md-on-surface-variant text-xs w-10 text-right">{stat.percentage.toFixed(1)}%</div>
                   </div>
                 </div>
 
-                <ChevronRight className="w-5 h-5" style={{ color: 'var(--muted-foreground)' }} />
+                <ChevronRight className="w-5 h-5 text-md-on-surface-variant" />
               </div>
             ))
           )}
         </div>
       </div>
 
-      {/* Trend Modal */}
+      {/* Trend Modal — 6.4 Glass Card + backdrop-blur-sm overlay */}
       {selectedCategory && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-sm" onClick={() => setSelectedCategory(null)}>
-          <div className="w-full max-w-md rounded-t-3xl p-6 shadow-xl animate-in slide-in-from-bottom-10 flex flex-col max-h-[85vh]" style={{ background: 'var(--card-bg)' }} onClick={e => e.stopPropagation()}>
+          <div className="w-full max-w-4xl glass-card rounded-t-3xl p-6 shadow-xl animate-in slide-in-from-bottom-10 flex flex-col max-h-[85vh]" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: getCategoryColor(selectedCategory) + '20', color: getCategoryColor(selectedCategory) }}>
                   <CategoryIcon category={selectedCategory} />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold" style={{ color: 'var(--foreground)' }}>{selectedCategory}</h3>
-                  <p className="text-xs" style={{ color: 'var(--muted)' }}>歷史趨勢</p>
+                  <h3 className="text-md-on-surface text-xl font-bold">{selectedCategory}</h3>
+                  <p className="text-md-on-surface-variant text-xs">歷史趨勢</p>
                 </div>
               </div>
-              <button onClick={() => setSelectedCategory(null)} className="p-2 rounded-full" style={{ color: 'var(--muted)' }}>
+              <button onClick={() => setSelectedCategory(null)} className="p-2 rounded-full text-md-on-surface-variant">
                 <X className="w-6 h-6" />
               </button>
             </div>
 
             {/* Date Range Filter */}
-            <div className="flex items-center gap-2 mb-4 p-2 rounded-xl" style={{ background: 'var(--input-bg)' }}>
+            <div className="flex items-center gap-2 mb-4 bg-md-surface-container-low p-2 rounded-xl">
               <div className="flex items-center flex-1">
-                <CalendarIcon className="w-4 h-4 mr-2" style={{ color: 'var(--muted)' }} />
+                <CalendarIcon className="w-4 h-4 mr-2 text-md-on-surface-variant" />
                 <input
                   type="month"
                   value={trendRange.start}
@@ -514,11 +502,10 @@ export default function StatsPage() {
                       return { ...p, start: newStart };
                     });
                   }}
-                  className="bg-transparent text-sm font-medium outline-none w-full"
-                  style={{ color: 'var(--foreground)' }}
+                  className="bg-transparent text-md-on-surface text-sm font-medium outline-none w-full"
                 />
               </div>
-              <span style={{ color: 'var(--muted)' }}>-</span>
+              <span className="text-md-on-surface-variant">-</span>
               <div className="flex items-center flex-1">
                 <input
                   type="month"
@@ -540,21 +527,20 @@ export default function StatsPage() {
                       return { ...p, end: newEnd };
                     });
                   }}
-                  className="bg-transparent text-sm font-medium outline-none w-full text-right"
-                  style={{ color: 'var(--foreground)' }}
+                  className="bg-transparent text-md-on-surface text-sm font-medium outline-none w-full text-right"
                 />
               </div>
             </div>
 
-            <div className="rounded-2xl p-4 flex-1 min-h-[200px] overflow-hidden flex flex-col" style={{ background: 'var(--input-bg)' }}>
+            <div className="bg-md-surface-container-low rounded-2xl p-4 flex-1 min-h-[200px] overflow-hidden flex flex-col">
               {trendLoading ? (
-                <div className="h-full flex items-center justify-center" style={{ color: 'var(--muted)' }}>載入中...</div>
+                <div className="h-full flex items-center justify-center text-md-on-surface-variant">載入中...</div>
               ) : (
                 <TrendChart data={trendData} category={selectedCategory} />
               )}
             </div>
 
-            <div className="mt-6 text-center text-sm" style={{ color: 'var(--muted-foreground)' }}>
+            <div className="mt-6 text-center text-md-on-surface-variant text-sm">
               點擊其他區域關閉
             </div>
           </div>
