@@ -6,87 +6,50 @@ import { supabase } from '@/lib/supabase';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function MonthlyPage() {
-  /** -----------------------------
-   * ?ºæœ¬?¥æ?è³‡è?
-   * ----------------------------- */
-  // è§?±º SSG ?‚é??ç??é?ï¼šå?å§‹å€¼è¨­??nullï¼Œé€é? useEffect ?¨å?ç«¯æ›´??
   const [todayDate, setTodayDate] = useState<Date | null>(null);
 
-  // ?–å??°å??‚é? YYYY-MM-DD
   function getTaipeiDateStr(d: Date) {
     return d.toLocaleString('sv-SE', { timeZone: 'Asia/Taipei' }).slice(0, 10);
   }
 
   const [current, setCurrent] = useState(() => {
-    // ?™è£¡?å??¼å¯?½ä???Build Timeï¼Œä???useEffect ?ƒè¢«?¡æ­£
     const now = new Date();
-    return {
-      year: now.getFullYear(),
-      month: now.getMonth(), // 0~11
-    };
+    return { year: now.getFullYear(), month: now.getMonth() };
   });
 
   useEffect(() => {
-    // ç¢ºä???Client ç«¯åŸ·è¡Œæ?ï¼Œå?å¾—ç•¶ä¸‹ç?æ­???‚é?
     const now = new Date();
     setTodayDate(now);
-
-    // ?¡æ­£?¶å??ˆä»½ï¼ˆè‹¥ä½¿ç”¨?…å?å¥½è·¨?ˆé??Ÿï?
-    setCurrent({
-      year: now.getFullYear(),
-      month: now.getMonth(),
-    });
+    setCurrent({ year: now.getFullYear(), month: now.getMonth() });
   }, []);
 
   const todayStr = todayDate ? getTaipeiDateStr(todayDate) : '';
 
-  /** -----------------------------
-   * ?¬æ?æ¯æ—¥?‘é?ç¸½å?
-   * daySums = { '2025-11-19': 600, ... }
-   * ----------------------------- */
   const [daySums, setDaySums] = useState<Record<string, number>>({});
   const [monthTotal, setMonthTotal] = useState(0);
-
-  /** -----------------------------
-   * ?¬æ??ç?ï¼ˆä???Supabase ?€?°ä?ç­†ï?
-   * ----------------------------- */
   const [budget, setBudget] = useState<number>(0);
 
   async function loadBudget() {
     const { data, error } = await supabase
       .from('p_budgets')
       .select('budget')
-      .order('id', { ascending: false }) // ?€?°ä?ç­?
+      .order('id', { ascending: false })
       .limit(1);
-
-    if (error) {
-      console.error('è®€?–é?ç®—éŒ¯èª¤ï?', error);
-      return;
-    }
-
-    if (data && data.length > 0) {
-      setBudget(data[0].budget);
-    } else {
-      setBudget(0);
-    }
+    if (error) { console.error('loadBudget error', error); return; }
+    if (data && data.length > 0) setBudget(data[0].budget);
+    else setBudget(0);
   }
 
-  /** -----------------------------
-   * ?“å??¬æ??€?‰è?å¸³è???
-   * ----------------------------- */
   async function loadMonthData(year: number, month: number) {
     const yyyyMm = `${year}-${String(month + 1).padStart(2, '0')}`;
-
     const { data, error } = await supabase
       .from('p_expenses')
       .select('*')
       .like('time', `${yyyyMm}%`);
-
     if (error) return console.error(error);
 
     const sums: Record<string, number> = {};
     let total = 0;
-
     (data || []).forEach((item) => {
       const d = item.time;
       const amt = item.amount ?? 0;
@@ -94,36 +57,24 @@ export default function MonthlyPage() {
       sums[d] += amt;
       total += amt;
     });
-
     setDaySums(sums);
     setMonthTotal(total);
   }
 
-  /** -----------------------------
-   * ?ˆæ??¼ï??«ç©º?½ï?
-   * ----------------------------- */
   function getCalendarMatrix(y: number, m: number) {
     const firstDay = new Date(y, m, 1);
-    const weekday = (firstDay.getDay() + 6) % 7; // ?±ä?=0
+    const weekday = (firstDay.getDay() + 6) % 7;
     const days = new Date(y, m + 1, 0).getDate();
-
     const list: (number | null)[] = [];
     for (let i = 0; i < weekday; i++) list.push(null);
     for (let d = 1; d <= days; d++) list.push(d);
-
     return list;
   }
 
-  /** -----------------------------
-   * ?ˆä»½?‡æ?
-   * ----------------------------- */
   function prevMonth() {
     let y = current.year;
     let m = current.month - 1;
-    if (m < 0) {
-      m = 11;
-      y -= 1;
-    }
+    if (m < 0) { m = 11; y -= 1; }
     setCurrent({ year: y, month: m });
     loadMonthData(y, m);
     loadBudget();
@@ -132,26 +83,18 @@ export default function MonthlyPage() {
   function nextMonth() {
     let y = current.year;
     let m = current.month + 1;
-    if (m > 11) {
-      m = 0;
-      y += 1;
-    }
+    if (m > 11) { m = 0; y += 1; }
     setCurrent({ year: y, month: m });
     loadMonthData(y, m);
     loadBudget();
   }
 
-  /** -----------------------------
-   * ?æ¬¡è¼‰å…¥
-   * ----------------------------- */
   useEffect(() => {
     loadMonthData(current.year, current.month);
-    loadBudget(); // è®€?–æ??°é?ç®?
+    loadBudget();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /** -----------------------------
-   * helperï¼šé?é¡é???
-   * ----------------------------- */
   function amountColor(n: number) {
     if (n > 0) return 'text-green-500';
     if (n < 0) return 'text-md-error';
@@ -162,79 +105,43 @@ export default function MonthlyPage() {
 
   return (
     <div className="p-4 max-w-4xl mx-auto">
-      {/* å¹´æ? + ä¸Šä??ˆå?????Glass Card */}
       <div className="glass-card p-3 flex items-center justify-between mb-6">
-        <button
-          onClick={prevMonth}
-          className="p-3 hover:bg-md-surface-container-highest rounded-full transition-colors"
-        >
+        <button onClick={prevMonth} className="p-3 hover:bg-md-surface-container-highest rounded-full transition-colors">
           <ChevronLeft className="w-6 h-6 stroke-[3] text-md-primary" />
         </button>
-
         <div className="font-[family-name:var(--font-headline)] text-xl font-bold text-md-on-surface">
-          {current.year} å¹?{current.month + 1} ??
+          {current.year} å¹´ {current.month + 1} æœˆ
         </div>
-
-        <button
-          onClick={nextMonth}
-          className="p-3 hover:bg-md-surface-container-highest rounded-full transition-colors"
-        >
+        <button onClick={nextMonth} className="p-3 hover:bg-md-surface-container-highest rounded-full transition-colors">
           <ChevronRight className="w-6 h-6 stroke-[3] text-md-primary" />
         </button>
       </div>
 
-      {/* ?Ÿæ???*/}
       <div className="grid grid-cols-7 text-center text-xs font-semibold mb-2 text-md-on-surface-variant uppercase tracking-widest">
         <div>ä¸€</div>
-        <div>äº?/div>
-        <div>ä¸?/div>
-        <div>??/div>
-        <div>äº?/div>
-        <div>??/div>
-        <div>??/div>
+        <div>äºŒ</div>
+        <div>ä¸‰</div>
+        <div>å››</div>
+        <div>äº”</div>
+        <div>å…­</div>
+        <div>æ—¥</div>
       </div>
 
-      {/* ?ˆæ???*/}
       <div className="grid grid-cols-7 gap-2 text-center text-sm">
         {getCalendarMatrix(current.year, current.month).map((day, idx) => {
           if (!day) {
-            return (
-              <div
-                key={idx}
-                className="h-12 bg-md-surface-container-low rounded-xl"
-              ></div>
-            );
+            return <div key={idx} className="h-12 bg-md-surface-container-low rounded-xl" />;
           }
-
-          const dateStr = `${current.year}-${String(
-            current.month + 1,
-          ).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-
+          const dateStr = `${current.year}-${String(current.month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
           const sum = daySums[dateStr] ?? 0;
-
-          const isToday =
-            todayDate &&
-            dateStr === todayStr &&
-            current.year === todayDate.getFullYear() &&
-            current.month === todayDate.getMonth();
+          const isToday = todayDate && dateStr === todayStr && current.year === todayDate.getFullYear() && current.month === todayDate.getMonth();
 
           return (
-            <Link
-              key={idx}
-              href={`/today?date=${dateStr}`}
-              className={`h-12 flex flex-col items-center justify-center rounded-xl transition-colors
-                ${isToday
-                  ? 'bg-md-primary-container text-md-on-primary font-bold'
-                  : 'bg-md-surface-container-high text-md-on-surface'
-                }
-              `}
-            >
+            <Link key={idx} href={`/today?date=${dateStr}`}
+              className={`h-12 flex flex-col items-center justify-center rounded-xl transition-colors ${isToday ? 'bg-md-primary-container text-md-on-primary font-bold' : 'bg-md-surface-container-high text-md-on-surface'}`}>
               <div className="leading-none">{day}</div>
-
               {sum !== 0 && (
-                <div
-                  className={`text-[10px] leading-none mt-0.5 ${isToday ? 'text-md-on-primary' : amountColor(sum)}`}
-                >
+                <div className={`text-[10px] leading-none mt-0.5 ${isToday ? 'text-md-on-primary' : amountColor(sum)}`}>
                   {sum.toLocaleString()}
                 </div>
               )}
@@ -243,22 +150,21 @@ export default function MonthlyPage() {
         })}
       </div>
 
-      {/* åº•éƒ¨çµ±è? ??Glass Card + Bento Grid */}
       <div className="mt-6 grid grid-cols-3 gap-3">
         <div className="glass-card p-4 flex flex-col items-center">
-          <span className="text-xs text-md-on-surface-variant mb-1">?¬æ??ç?</span>
+          <span className="text-xs text-md-on-surface-variant mb-1">æœ¬æœˆé ç®—</span>
           <span className="font-[family-name:var(--font-headline)] text-lg font-bold text-md-on-surface">
             {(budget || 0).toLocaleString()}
           </span>
         </div>
         <div className="glass-card p-4 flex flex-col items-center">
-          <span className="text-xs text-md-on-surface-variant mb-1">?®å??±è²»</span>
+          <span className="text-xs text-md-on-surface-variant mb-1">æœ¬æœˆæ¶ˆè²»</span>
           <span className={`font-[family-name:var(--font-headline)] text-lg font-bold ${amountColor(monthTotal)}`}>
             {monthTotal.toLocaleString()}
           </span>
         </div>
         <div className="glass-card p-4 flex flex-col items-center">
-          <span className="text-xs text-md-on-surface-variant mb-1">?©é??‘é?</span>
+          <span className="text-xs text-md-on-surface-variant mb-1">æœ¬æœˆé¤˜é¡</span>
           <span className={`font-[family-name:var(--font-headline)] text-lg font-bold ${remaining < 0 ? 'text-md-error' : 'text-md-on-surface'}`}>
             {remaining.toLocaleString()}
           </span>
