@@ -24,27 +24,25 @@ import {
   Calendar as CalendarIcon,
 } from 'lucide-react';
 
-/** --------------------------------------------------------
- * Constants & Types
- * -------------------------------------------------------- */
+/** Constants & Types */
 const CATEGORIES = [
-  'é¤é£²é£Ÿå?', 'äº¤é€?, '?¥ç”¨??, 'å¨›æ?', '?«ç?', '?™è‚²',
-  'ä½æˆ¿', 'æ°´é›»?¦æ–¯', '?šè?ç¶²è·¯', '?…è?', '?é£¾è¡?‰©', '?œè²»'
+  'é¤é£²é£Ÿå“', 'äº¤é€š', 'æ—¥ç”¨å“', 'å¨›æ¨‚', 'é†«ç™‚', 'æ•™è‚²',
+  'ä½æˆ¿', 'æ°´é›»ç“¦æ–¯', 'é›»ä¿¡ç¶²è·¯', 'æ—…éŠ', 'æœé£¾ç¾å¦', 'é€è²»'
 ];
 
 const CATEGORY_COLORS: Record<string, string> = {
-  'é¤é£²é£Ÿå?': '#F87171', // Red
-  'äº¤é€?: '#60A5FA',     // Blue
-  '?¥ç”¨??: '#34D399',   // Green
-  'å¨›æ?': '#FBBF24',     // Yellow
-  '?«ç?': '#A78BFA',     // Purple
-  '?™è‚²': '#F472B6',     // Pink
-  'ä½æˆ¿': '#818CF8',     // Indigo
-  'æ°´é›»?¦æ–¯': '#FCD34D', // Amber
-  '?šè?ç¶²è·¯': '#6EE7B7', // Emerald
-  '?…è?': '#38BDF8',     // Sky
-  '?é£¾è¡?‰©': '#C084FC', // Violet
-  '?œè²»': '#9CA3AF',     // Gray
+  'é¤é£²é£Ÿå“': '#F87171',
+  'äº¤é€š': '#60A5FA',
+  'æ—¥ç”¨å“': '#34D399',
+  'å¨›æ¨‚': '#FBBF24',
+  'é†«ç™‚': '#A78BFA',
+  'æ•™è‚²': '#F472B6',
+  'ä½æˆ¿': '#818CF8',
+  'æ°´é›»ç“¦æ–¯': '#FCD34D',
+  'é›»ä¿¡ç¶²è·¯': '#6EE7B7',
+  'æ—…éŠ': '#38BDF8',
+  'æœé£¾ç¾å¦': '#C084FC',
+  'é€è²»': '#9CA3AF',
   'default': '#CBD5E1'
 };
 
@@ -56,18 +54,18 @@ function getCategoryColor(cat: string) {
 function CategoryIcon({ category, className }: { category: string, className?: string }) {
   const props = { className: className || "w-6 h-6" };
   switch (category) {
-    case 'é¤é£²é£Ÿå?': return <Utensils {...props} />;
-    case 'äº¤é€?: return <Car {...props} />;
-    case '?¥ç”¨??: return <ShoppingBag {...props} />;
-    case 'å¨›æ?': return <Gamepad2 {...props} />;
-    case '?«ç?': return <Stethoscope {...props} />;
-    case '?™è‚²': return <GraduationCap {...props} />;
+    case 'é¤é£²é£Ÿå“': return <Utensils {...props} />;
+    case 'äº¤é€š': return <Car {...props} />;
+    case 'æ—¥ç”¨å“': return <ShoppingBag {...props} />;
+    case 'å¨›æ¨‚': return <Gamepad2 {...props} />;
+    case 'é†«ç™‚': return <Stethoscope {...props} />;
+    case 'æ•™è‚²': return <GraduationCap {...props} />;
     case 'ä½æˆ¿': return <Home {...props} />;
-    case 'æ°´é›»?¦æ–¯': return <Lamp {...props} />;
-    case '?šè?ç¶²è·¯': return <Wifi {...props} />;
-    case '?…è?': return <Plane {...props} />;
-    case '?é£¾è¡?‰©': return <Shirt {...props} />;
-    case '?œè²»': return <Gift {...props} />;
+    case 'æ°´é›»ç“¦æ–¯': return <Lamp {...props} />;
+    case 'é›»ä¿¡ç¶²è·¯': return <Wifi {...props} />;
+    case 'æ—…éŠ': return <Plane {...props} />;
+    case 'æœé£¾ç¾å¦': return <Shirt {...props} />;
+    case 'é€è²»': return <Gift {...props} />;
     default: return <CircleHelp {...props} />;
   }
 }
@@ -79,13 +77,10 @@ type CategoryStat = {
   color: string;
 };
 
-/** --------------------------------------------------------
- * Donut Chart Component (SVG Path) ??6.1 styling updates
- * -------------------------------------------------------- */
+/** Donut Chart Component */
 function DonutChart({ data, total }: { data: CategoryStat[], total: number }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  // Helpers for creating arc paths
   function getCoordinatesForPercent(percent: number) {
     const x = Math.cos(2 * Math.PI * percent);
     const y = Math.sin(2 * Math.PI * percent);
@@ -98,27 +93,20 @@ function DonutChart({ data, total }: { data: CategoryStat[], total: number }) {
     const endPercent = cumulativePercent + (slice.percentage / 100);
     cumulativePercent = endPercent;
 
-    // if full circle (100%), handle special case
     if (slice.percentage >= 99.9) {
-      return {
-        ...slice,
-        pathData: `M 1 0 A 1 1 0 1 1 -1 0 A 1 1 0 1 1 1 0`, // 2 arcs to make a circle
-        index
-      };
+      return { ...slice, pathData: `M 1 0 A 1 1 0 1 1 -1 0 A 1 1 0 1 1 1 0`, index };
     }
 
     const [startX, startY] = getCoordinatesForPercent(startPercent);
     const [endX, endY] = getCoordinatesForPercent(endPercent);
     const largeArcFlag = slice.percentage / 100 > 0.5 ? 1 : 0;
-
     const pathData = `M ${startX} ${startY} A 1 1 0 ${largeArcFlag} 1 ${endX} ${endY}`;
 
     return { ...slice, pathData, index };
   });
 
-  // Center Text Logic
   const activeItem = activeIndex !== null ? data[activeIndex] : null;
-  const centerLabel = activeItem ? activeItem.category : "ç¸½æ”¯??;
+  const centerLabel = activeItem ? activeItem.category : "\u7E3D\u652F\u51FA";
   const centerValue = activeItem
     ? `${activeItem.percentage.toFixed(1)}%`
     : `${total.toLocaleString()}`;
@@ -128,7 +116,7 @@ function DonutChart({ data, total }: { data: CategoryStat[], total: number }) {
     return (
       <div className="relative w-52 h-52 mx-auto flex items-center justify-center">
         <div className="absolute inset-0 rounded-full border-[16px] border-md-surface-container-highest"></div>
-        <div className="text-sm text-md-on-surface-variant">?¬æ??¡æ”¯??/div>
+        <div className="text-sm text-md-on-surface-variant">{"\u5C1A\u7121\u652F\u51FA"}</div>
       </div>
     );
   }
@@ -149,10 +137,7 @@ function DonutChart({ data, total }: { data: CategoryStat[], total: number }) {
         ))}
       </svg>
 
-      {/* Center Text (Click center to reset) */}
-      <div
-        className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
-      >
+      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
         <div className="text-sm font-medium mb-1 text-md-on-surface-variant">{centerLabel}</div>
         <div className="text-2xl font-bold text-md-on-surface">{centerValue}</div>
         {centerSubValue && (
@@ -160,42 +145,33 @@ function DonutChart({ data, total }: { data: CategoryStat[], total: number }) {
         )}
       </div>
 
-      {/* Reset overlay if active */}
       {activeIndex !== null && (
-        <div
-          className="absolute inset-0 z-[-1] cursor-pointer"
-          onClick={() => setActiveIndex(null)}
-        />
+        <div className="absolute inset-0 z-[-1] cursor-pointer" onClick={() => setActiveIndex(null)} />
       )}
     </div>
   );
 }
 
-/** --------------------------------------------------------
- * Trend Chart Component ??styling updates
- * -------------------------------------------------------- */
+/** Trend Chart Component */
 function TrendChart({ data, category }: { data: { month: string, total: number }[], category: string }) {
   const max = Math.max(...data.map(d => d.total), 1);
   const color = getCategoryColor(category);
   const [activeBar, setActiveBar] = useState<number | null>(null);
 
-  if (data.length === 0) return <div className="h-48 flex items-center justify-center text-md-on-surface-variant">?¡è???/div>;
+  if (data.length === 0) return <div className="h-48 flex items-center justify-center text-md-on-surface-variant">{"\u7121\u8CC7\u6599"}</div>;
 
   return (
     <div className="w-full overflow-x-auto pb-2 touch-pan-x no-scrollbar">
-      {/* min-w-max ensures container expands to fit all shrunk-0 children */}
       <div className="flex items-end gap-4 px-2 pt-8 min-w-max">
         {data.map((item, i) => {
           const heightPercent = (item.total / max) * 100;
           const isActive = activeBar === i;
           return (
-            // shrink-0 prevents bars from being squished
             <div
               key={i}
               className="flex flex-col items-center gap-2 group shrink-0 w-[40px] cursor-pointer"
               onClick={() => setActiveBar(isActive ? null : i)}
             >
-              {/* Bar Plot Area with fixed height */}
               <div className="h-32 w-full flex items-end justify-center relative">
                 <div
                   className={`absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-mono whitespace-nowrap pointer-events-none transition-opacity text-md-on-surface ${isActive ? 'opacity-100 font-bold' : ''}`}
@@ -227,34 +203,23 @@ export default function StatsPage() {
   const [monthTotal, setMonthTotal] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // Trend Modal
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [trendData, setTrendData] = useState<{ month: string, total: number }[]>([]);
   const [trendLoading, setTrendLoading] = useState(false);
 
-  // Custom Range for Trend
   const [trendRange, setTrendRange] = useState<{ start: string, end: string }>({
     start: '', end: ''
   });
 
-  // Init trend range when category selected (default last 6 months)
   useEffect(() => {
     if (selectedCategory) {
-      // ä½¿ç”¨?¬åœ°?‚é?è¨ˆç?ï¼Œé¿??UTC ?‚å?å·®ç•°å°è‡´?ˆä»½?¯èª¤
       const now = new Date();
-
-      // çµæ??ˆä»½ï¼šç•¶?æ?ä»?
       const endYear = now.getFullYear();
       const endMonth = now.getMonth() + 1;
-
-      // ?‹å??ˆä»½ï¼??‹æ???
-      // ?è¼¯ï¼šå»ºç«‹ä??‹æ—¥?Ÿåœ¨?¶æ?1?Ÿï??¶å????5?‹æ?
       const startObj = new Date(endYear, now.getMonth() - 5, 1);
       const startYear = startObj.getFullYear();
       const startMonth = startObj.getMonth() + 1;
-
       const fmt = (y: number, m: number) => `${y}-${String(m).padStart(2, '0')}`;
-
       setTrendRange({
         start: fmt(startYear, startMonth),
         end: fmt(endYear, endMonth)
@@ -262,12 +227,9 @@ export default function StatsPage() {
     }
   }, [selectedCategory]);
 
-  // Format: YYYY-MM
   const currentMonthStr = currentMonth.toISOString().slice(0, 7);
 
-  /** -----------------------------
-   * Fetch Monthly Data
-   * ----------------------------- */
+  /** Fetch Monthly Data */
   useEffect(() => {
     async function fetchStats() {
       setLoading(true);
@@ -287,7 +249,7 @@ export default function StatsPage() {
       const map: Record<string, number> = {};
       let total = 0;
       data.forEach((item: any) => {
-        const cat = item.category || '?ªå?é¡?;
+        const cat = item.category || '\u672A\u5206\u985E';
         const amt = Number(item.amount) || 0;
         if (cat) {
           map[cat] = (map[cat] || 0) + amt;
@@ -312,9 +274,7 @@ export default function StatsPage() {
     fetchStats();
   }, [currentMonthStr]);
 
-  /** -----------------------------
-   * Fetch Trend Data (with custom range)
-   * ----------------------------- */
+  /** Fetch Trend Data */
   useEffect(() => {
     if (!selectedCategory || !trendRange.start || !trendRange.end) return;
 
@@ -322,16 +282,10 @@ export default function StatsPage() {
       setTrendLoading(true);
 
       const startStr = trendRange.start + '-01';
-
-      // Calculate next month of end range for upper bound (exclusive)
-      // This is safer than using '-31' which might be invalid date in some DBs
       const [endY, endM] = trendRange.end.split('-').map(Number);
       let nextY = endY;
       let nextM = endM + 1;
-      if (nextM > 12) {
-        nextM = 1;
-        nextY++;
-      }
+      if (nextM > 12) { nextM = 1; nextY++; }
       const endStr = `${nextY}-${String(nextM).padStart(2, '0')}-01`;
 
       const { data, error } = await supabase
@@ -347,18 +301,12 @@ export default function StatsPage() {
       } else {
         const monthMap: Record<string, number> = {};
 
-        // Generate months safely without timezone issues
         let [curY, curM] = trendRange.start.split('-').map(Number);
-        // Loop until current year-month is greater than end year-month
         while (curY * 12 + curM <= endY * 12 + endM) {
           const k = `${curY}-${String(curM).padStart(2, '0')}`;
           monthMap[k] = 0;
-
           curM++;
-          if (curM > 12) {
-            curM = 1;
-            curY++;
-          }
+          if (curM > 12) { curM = 1; curY++; }
         }
 
         data.forEach((item: any) => {
@@ -379,7 +327,6 @@ export default function StatsPage() {
     fetchTrend();
   }, [selectedCategory, trendRange]);
 
-
   function prevMonth() {
     const d = new Date(currentMonth);
     d.setMonth(d.getMonth() - 1);
@@ -396,30 +343,30 @@ export default function StatsPage() {
     <div className="min-h-screen flex flex-col bg-md-background">
       <div className="p-4 max-w-4xl mx-auto w-full flex-1 flex flex-col">
 
-        {/* æ¨™é??‡æ?ä»½å?????Glass Card month switcher */}
+        {/* Month switcher */}
         <div className="glass-card p-3 flex items-center justify-between mb-6">
           <button onClick={prevMonth} className="p-3 hover:bg-md-surface-container-highest rounded-full transition-colors">
             <ChevronLeft className="w-6 h-6 stroke-[3] text-md-primary" />
           </button>
           <div className="font-[family-name:var(--font-headline)] text-xl font-bold text-md-on-surface">
-            {currentMonth.getFullYear()} å¹?{currentMonth.getMonth() + 1} ??
+            {currentMonth.getFullYear()} &#24180; {currentMonth.getMonth() + 1} &#26376;
           </div>
           <button onClick={nextMonth} className="p-3 hover:bg-md-surface-container-highest rounded-full transition-colors">
             <ChevronRight className="w-6 h-6 stroke-[3] text-md-primary" />
           </button>
         </div>
 
-        {/* ?“é?????6.1 Glass Card + Kinetic Glow */}
+        {/* Donut Chart */}
         <div className="glass-card kinetic-glow p-6 mb-6 flex justify-center">
           <DonutChart data={stats} total={monthTotal} />
         </div>
 
-        {/* ?†é??—è¡¨ ??6.2 Glass Card + 6.3 Progress bar */}
+        {/* Category list */}
         <div className="space-y-3 pb-20">
           {loading ? (
-            <div className="text-center py-10 text-md-on-surface-variant">è¨ˆç?ä¸?..</div>
+            <div className="text-center py-10 text-md-on-surface-variant">{"\u8A08\u7B97\u4E2D..."}</div>
           ) : stats.length === 0 ? (
-            <div className="text-center py-10 text-md-on-surface-variant">?¬æ?å°šç„¡è³‡æ?</div>
+            <div className="text-center py-10 text-md-on-surface-variant">{"\u672C\u6708\u5C1A\u7121\u8CC7\u6599"}</div>
           ) : (
             stats.map((stat) => (
               <div
@@ -427,25 +374,19 @@ export default function StatsPage() {
                 onClick={() => setSelectedCategory(stat.category)}
                 className="glass-card p-4 flex items-center gap-4 cursor-pointer active:scale-[0.98] transition-all"
               >
-                {/* Icon */}
                 <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: stat.color + '20', color: stat.color }}>
                   <CategoryIcon category={stat.category} />
                 </div>
 
-                {/* Info */}
                 <div className="flex-1">
                   <div className="flex justify-between items-end mb-1">
                     <div className="text-md-on-surface font-bold">{stat.category}</div>
                     <div className="text-md-on-surface font-bold">${stat.total.toLocaleString()}</div>
                   </div>
 
-                  {/* Progress Bar ??6.3 bg-md-surface-container-low */}
                   <div className="flex items-center gap-2">
                     <div className="flex-1 h-2 rounded-full overflow-hidden bg-md-surface-container-low">
-                      <div
-                        className="h-full rounded-full"
-                        style={{ width: `${stat.percentage}%`, backgroundColor: stat.color }}
-                      />
+                      <div className="h-full rounded-full" style={{ width: `${stat.percentage}%`, backgroundColor: stat.color }} />
                     </div>
                     <div className="text-md-on-surface-variant text-xs w-10 text-right">{stat.percentage.toFixed(1)}%</div>
                   </div>
@@ -458,7 +399,7 @@ export default function StatsPage() {
         </div>
       </div>
 
-      {/* Trend Modal ??6.4 Glass Card + backdrop-blur-sm overlay */}
+      {/* Trend Modal */}
       {selectedCategory && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-sm" onClick={() => setSelectedCategory(null)}>
           <div className="w-full max-w-4xl glass-card rounded-t-3xl p-6 shadow-xl animate-in slide-in-from-bottom-10 flex flex-col max-h-[85vh]" onClick={e => e.stopPropagation()}>
@@ -469,7 +410,7 @@ export default function StatsPage() {
                 </div>
                 <div>
                   <h3 className="text-md-on-surface text-xl font-bold">{selectedCategory}</h3>
-                  <p className="text-md-on-surface-variant text-xs">æ­·å²è¶¨å‹¢</p>
+                  <p className="text-md-on-surface-variant text-xs">{"\u6B77\u53F2\u8DA8\u52E2"}</p>
                 </div>
               </div>
               <button onClick={() => setSelectedCategory(null)} className="p-2 rounded-full text-md-on-surface-variant">
@@ -487,13 +428,10 @@ export default function StatsPage() {
                   onChange={e => {
                     const newStart = e.target.value;
                     if (!newStart) return;
-
                     setTrendRange(p => {
-                      // ??-01 ç¢ºä?è·¨ç€è¦½?¨è§£?æ­£ç¢?
                       const s = new Date(newStart + '-01');
-                      const e = new Date(p.end + '-01');
-                      const months = (e.getFullYear() - s.getFullYear()) * 12 + (e.getMonth() - s.getMonth());
-
+                      const end = new Date(p.end + '-01');
+                      const months = (end.getFullYear() - s.getFullYear()) * 12 + (end.getMonth() - s.getMonth());
                       if (months > 11 || months < 0) {
                         const newEnd = new Date(s);
                         newEnd.setMonth(newEnd.getMonth() + 11);
@@ -513,14 +451,12 @@ export default function StatsPage() {
                   onChange={e => {
                     const newEnd = e.target.value;
                     if (!newEnd) return;
-
                     setTrendRange(p => {
                       const s = new Date(p.start + '-01');
-                      const e = new Date(newEnd + '-01');
-                      const months = (e.getFullYear() - s.getFullYear()) * 12 + (e.getMonth() - s.getMonth());
-
+                      const end = new Date(newEnd + '-01');
+                      const months = (end.getFullYear() - s.getFullYear()) * 12 + (end.getMonth() - s.getMonth());
                       if (months > 11 || months < 0) {
-                        const newStart = new Date(e);
+                        const newStart = new Date(end);
                         newStart.setMonth(newStart.getMonth() - 11);
                         return { start: newStart.toISOString().slice(0, 7), end: newEnd };
                       }
@@ -534,14 +470,14 @@ export default function StatsPage() {
 
             <div className="bg-md-surface-container-low rounded-2xl p-4 flex-1 min-h-[200px] overflow-hidden flex flex-col">
               {trendLoading ? (
-                <div className="h-full flex items-center justify-center text-md-on-surface-variant">è¼‰å…¥ä¸?..</div>
+                <div className="h-full flex items-center justify-center text-md-on-surface-variant">{"\u8F09\u5165\u4E2D..."}</div>
               ) : (
                 <TrendChart data={trendData} category={selectedCategory} />
               )}
             </div>
 
             <div className="mt-6 text-center text-md-on-surface-variant text-sm">
-              é»æ??¶ä??€?Ÿé???
+              {"\u9EDE\u64CA\u5916\u90E8\u95DC\u9589"}
             </div>
           </div>
         </div>
