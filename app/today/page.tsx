@@ -388,7 +388,7 @@ function TodayPageContent() {
                 總金額
               </span>
               <div className="flex items-baseline gap-1">
-                <span className="font-[family-name:var(--font-headline)] text-5xl md:text-7xl font-bold text-md-primary text-glow tracking-tighter">
+                <span className="font-[family-name:var(--font-headline)] text-4xl md:text-5xl font-bold text-md-primary text-glow tracking-tighter">
                   {headerAmount}
                 </span>
               </div>
@@ -398,9 +398,9 @@ function TodayPageContent() {
 
           <a
             href="/monthly"
-            className="flex items-center justify-center w-12 h-12 rounded-full bg-md-surface-container-highest text-md-on-surface mt-4 transition-colors hover:bg-md-surface-container-high"
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-md-surface-container-highest text-md-on-surface transition-colors hover:bg-md-surface-container-high"
           >
-            <LayoutGrid className="w-6 h-6" />
+            <LayoutGrid className="w-5 h-5" />
           </a>
         </div>
 
@@ -486,7 +486,7 @@ function TodayPageContent() {
             const amount = item.amount ?? 0;
             let amountColorClass = 'text-md-on-surface-variant';
             if (amount < 0) amountColorClass = 'text-md-error';
-            else if (amount > 0) amountColorClass = 'text-green-500';
+            else if (amount > 0) amountColorClass = 'text-emerald-600';
 
             const weekday = getWeekdayLabel(item.time);
             const displayUser = nameMap[item.user_id] || item.user_id;

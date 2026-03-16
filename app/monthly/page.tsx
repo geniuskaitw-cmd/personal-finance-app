@@ -96,7 +96,7 @@ export default function MonthlyPage() {
   }, []);
 
   function amountColor(n: number) {
-    if (n > 0) return 'text-green-500';
+    if (n > 0) return 'text-emerald-600';
     if (n < 0) return 'text-md-error';
     return 'text-md-on-surface-variant';
   }

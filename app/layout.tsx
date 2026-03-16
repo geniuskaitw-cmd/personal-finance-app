@@ -22,6 +22,15 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: '私人秘書',
   description: '家庭記帳與行事曆私人秘書',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: '私人秘書',
+  },
+  other: {
+    'mobile-web-app-capable': 'yes',
+  },
 };
 
 export default function RootLayout({
@@ -31,6 +40,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh-Hant" className={`${spaceGrotesk.variable} ${inter.variable}`}>
+      <head>
+        <link rel="apple-touch-icon" href="/icon.svg" />
+        <meta name="theme-color" content="#0e131d" />
+      </head>
       <body className="bg-md-background text-md-on-surface min-h-screen">
         {/* Task 2.4: Background decorative blur circles */}
         <div className="fixed pointer-events-none -z-10 inset-0 overflow-hidden">
