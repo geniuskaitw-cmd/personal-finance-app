@@ -12,14 +12,14 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
 
   // -----------------------------
-  // 載入暱稱列表 + 預算
+  // 載入?�稱?�表 + ?��?
   // -----------------------------
   async function loadSettings() {
     setLoading(true);
 
-    // 讀取全部暱稱(user_names)
+    // 讀?�全?�暱�?user_names)
     const { data: nameData } = await supabase
-      .from('user_names')
+      .from('p_user_names')
       .select('*')
       .order('id', { ascending: true });
 
@@ -27,9 +27,9 @@ export default function SettingsPage() {
       setNameList(nameData);
     }
 
-    // 讀取預算 budgets（永遠只有一筆）
+    // 讀?��?�?budgets（永?�只?��?筆�?
     const { data: budgetData } = await supabase
-      .from('budgets')
+      .from('p_budgets')
       .select('*')
       .limit(1)
       .single();
@@ -48,18 +48,18 @@ export default function SettingsPage() {
   }, []);
 
   // -----------------------------
-  // 儲存暱稱
+  // ?��??�稱
   // -----------------------------
   async function handleSaveName(e: React.FormEvent) {
     e.preventDefault();
 
     if (!userId.trim() || !displayName.trim()) {
-      alert('請輸入 userId 與顯示名稱');
+      alert('請輸??userId ?�顯示�?�?);
       return;
     }
 
-    // upsert：如果 user_id 存在 → update；否則 insert
-    const { error } = await supabase.from('user_names').upsert(
+    // upsert：�???user_id 存在 ??update；否??insert
+    const { error } = await supabase.from('p_user_names').upsert(
       {
         user_id: userId.trim(),
         display_name: displayName.trim(),
@@ -70,44 +70,44 @@ export default function SettingsPage() {
 
     if (error) {
       console.error(error);
-      alert('儲存失敗，請稍後再試');
+      alert('?��?失�?，�?稍�??�試');
       return;
     }
 
-    alert('已儲存暱稱');
+    alert('已儲存暱�?);
     loadSettings();
   }
 
   // -----------------------------
-  // 儲存預算（budgets 永遠只會有一筆 id=1）
+  // ?��??��?（budgets 永�??��??��?�?id=1�?
   // -----------------------------
   async function handleSaveBudget(e: React.FormEvent) {
     e.preventDefault();
 
     if (budget === '' || isNaN(Number(budget))) {
-      alert('請輸入正確的預算金額');
+      alert('請輸?�正確�??��??��?');
       return;
     }
 
-    // 查是否已有資料
-    const { data } = await supabase.from('budgets').select('*').limit(1).single();
+    // ?�是?�已?��???
+    const { data } = await supabase.from('p_budgets').select('*').limit(1).single();
 
     if (!data) {
-      // 沒資料 → insert
-      const { error } = await supabase.from('budgets').insert({
+      // 沒�?????insert
+      const { error } = await supabase.from('p_budgets').insert({
         budget: Number(budget),
         updated_at: new Date().toISOString(),
       });
 
       if (error) {
         console.error(error);
-        alert('儲存預算失敗');
+        alert('?��??��?失�?');
         return;
       }
     } else {
-      // 有資料 → update
+      // ?��?????update
       const { error } = await supabase
-        .from('budgets')
+        .from('p_budgets')
         .update({
           budget: Number(budget),
           updated_at: new Date().toISOString(),
@@ -116,33 +116,33 @@ export default function SettingsPage() {
 
       if (error) {
         console.error(error);
-        alert('更新預算失敗');
+        alert('?�新?��?失�?');
         return;
       }
     }
 
-    alert('已儲存預算');
+    alert('已儲存�?�?);
     loadSettings();
   }
 
   // -----------------------------
-  // 畫面
+  // ?�面
   // -----------------------------
   return (
     <div className="p-4 max-w-4xl mx-auto">
       <h1 className="font-[family-name:var(--font-headline)] text-xl font-semibold tracking-tight text-md-on-surface mb-4">
-        設定
+        設�?
       </h1>
 
-      {loading && <p className="text-md-on-surface-variant text-sm">載入中…</p>}
+      {loading && <p className="text-md-on-surface-variant text-sm">載入中�?/p>}
 
       {!loading && (
         <div className="space-y-6">
-          {/* 暱稱設定 */}
+          {/* ?�稱設�? */}
           <section className="glass-card p-5">
-            <h2 className="text-md-on-surface text-sm font-semibold mb-2">userId 顯示名稱</h2>
+            <h2 className="text-md-on-surface text-sm font-semibold mb-2">userId 顯示?�稱</h2>
             <p className="text-md-on-surface-variant text-xs mb-3">
-              這裡可以設定「哪一個 userId 要顯示成什麼名稱」。
+              ?�裡?�以設�??�哪一??userId 要顯示�?什麼�?稱」�?
             </p>
 
             <form onSubmit={handleSaveName} className="space-y-3">
@@ -152,17 +152,17 @@ export default function SettingsPage() {
                   value={userId}
                   onChange={(e) => setUserId(e.target.value)}
                   className="w-full bg-md-surface-container border border-md-outline-variant/10 rounded-xl px-3 py-2.5 text-sm text-md-on-surface outline-none ring-2 ring-transparent focus:ring-md-primary transition-all"
-                  placeholder="請輸入 userId"
+                  placeholder="請輸??userId"
                 />
               </div>
 
               <div>
-                <label className="block text-md-on-surface-variant text-xs mb-1">顯示名稱</label>
+                <label className="block text-md-on-surface-variant text-xs mb-1">顯示?�稱</label>
                 <input
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   className="w-full bg-md-surface-container border border-md-outline-variant/10 rounded-xl px-3 py-2.5 text-sm text-md-on-surface outline-none ring-2 ring-transparent focus:ring-md-primary transition-all"
-                  placeholder="例如：我、老婆、小孩…"
+                  placeholder="例�?：�??�老�??��?孩�?
                 />
               </div>
 
@@ -170,15 +170,15 @@ export default function SettingsPage() {
                 type="submit"
                 className="w-full primary-gradient text-md-on-primary text-sm py-3 rounded-full font-bold kinetic-glow active:scale-[0.98] transition-transform"
               >
-                儲存
+                ?��?
               </button>
             </form>
 
-            {/* 列表 */}
+            {/* ?�表 */}
             <div className="mt-4">
-              <h3 className="text-md-on-surface text-sm font-semibold mb-2">目前設定列表</h3>
+              <h3 className="text-md-on-surface text-sm font-semibold mb-2">?��?設�??�表</h3>
               {nameList.length === 0 && (
-                <p className="text-md-on-surface-variant text-xs">尚未設定任何 userId。</p>
+                <p className="text-md-on-surface-variant text-xs">尚未設�?任�? userId??/p>
               )}
 
               <ul className="space-y-2">
@@ -195,19 +195,19 @@ export default function SettingsPage() {
             </div>
           </section>
 
-          {/* 預算設定 */}
+          {/* ?��?設�? */}
           <section className="glass-card p-5">
-            <h2 className="text-md-on-surface text-sm font-semibold mb-2">每月預算（全站共用）</h2>
+            <h2 className="text-md-on-surface text-sm font-semibold mb-2">每�??��?（全站共?��?</h2>
 
             <form onSubmit={handleSaveBudget} className="space-y-3">
               <div>
-                <label className="block text-md-on-surface-variant text-xs mb-1">預算金額</label>
+                <label className="block text-md-on-surface-variant text-xs mb-1">?��??��?</label>
                 <input
                   type="number"
                   value={budget}
                   onChange={(e) => setBudget(e.target.value === '' ? '' : Number(e.target.value))}
                   className="w-full bg-md-surface-container border border-md-outline-variant/10 rounded-xl px-3 py-2.5 text-sm text-md-on-surface outline-none ring-2 ring-transparent focus:ring-md-primary transition-all"
-                  placeholder="請輸入本月預算"
+                  placeholder="請輸?�本?��?�?
                 />
               </div>
 
@@ -215,7 +215,7 @@ export default function SettingsPage() {
                 type="submit"
                 className="w-full primary-gradient text-md-on-primary text-sm py-3 rounded-full font-bold kinetic-glow active:scale-[0.98] transition-transform"
               >
-                儲存預算
+                ?��??��?
               </button>
             </form>
           </section>

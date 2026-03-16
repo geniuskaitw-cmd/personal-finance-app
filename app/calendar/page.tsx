@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 
 /** --------------------------------------------------------
- * 型別定義
+ * ?�別定義
  * -------------------------------------------------------- */
 type CalendarEvent = {
   id: number;
@@ -38,7 +38,7 @@ type Holiday = {
 
 export default function CalendarPage() {
   /** --------------------------------------------------------
-   * 狀態管理
+   * ?�?�管??
    * -------------------------------------------------------- */
   const [viewMode, setViewMode] = useState<'list' | 'month'>('list');
   const [events, setEvents] = useState<CalendarEvent[]>([]);
@@ -46,27 +46,27 @@ export default function CalendarPage() {
   const [userMap, setUserMap] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
 
-  // 動作選單狀態
+  // ?��??�單?�??
   const [actionItem, setActionItem] = useState<CalendarEvent | null>(null);
   const [showActionMenu, setShowActionMenu] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
-  // 編輯表單狀態
+  // 編輯表單?�??
   const [editForm, setEditForm] = useState<{
     date: string;
     time: string;
     title: string;
   }>({ date: '', time: '', title: '' });
 
-  // 用於 List View 的滾動定位
+  // ?�於 List View ?�滾?��?�?
   const listRef = useRef<HTMLDivElement>(null);
   const eventRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  // 月曆模式當前瀏覽的年月
+  // ?��?模�??��??�覽?�年??
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  // 取得台北時間 YYYY-MM-DD
+  // ?��??��??��? YYYY-MM-DD
   function getTodayStr() {
     return new Date()
       .toLocaleString('sv-SE', { timeZone: 'Asia/Taipei' })
@@ -75,7 +75,7 @@ export default function CalendarPage() {
   const todayStr = getTodayStr();
 
   /** --------------------------------------------------------
-   * 資料讀取
+   * 資�?讀??
    * -------------------------------------------------------- */
   useEffect(() => {
     fetchAllData();
@@ -86,7 +86,7 @@ export default function CalendarPage() {
   }, []);
 
   async function fetchUserNames() {
-    const { data } = await supabase.from('user_names').select('user_id, display_name');
+    const { data } = await supabase.from('p_user_names').select('user_id, display_name');
     if (data) {
       const map: Record<string, string> = {};
       data.forEach((u: any) => (map[u.user_id] = u.display_name));
@@ -96,24 +96,24 @@ export default function CalendarPage() {
 
   async function fetchAllData() {
     setLoading(true);
-    // 讀取 Calendar 表，過濾 private
+    // 讀??Calendar 表�??�濾 private
     const { data, error } = await supabase
-      .from('calendar')
+      .from('p_calendar')
       .select('*')
       .eq('is_private', false)
-      .gte('date', todayStr) // 只抓取今天以後的行程
+      .gte('date', todayStr) // ?��??��?天以後�?行�?
       .order('date', { ascending: true })
       .order('time', { ascending: true });
 
     if (error) {
-      console.error('讀取行事曆失敗', error);
+      console.error('讀?��?事�?失�?', error);
     } else {
       setEvents(data || []);
     }
     setLoading(false);
   }
 
-  // 抓取台灣國定假日
+  // ?��??�灣?��??�日
   async function fetchHolidays(year: number) {
     try {
       const res = await fetch(
@@ -130,19 +130,19 @@ export default function CalendarPage() {
         if (item.isHoliday) {
           map[dStr] = {
             date: dStr,
-            name: item.description || item.name || '國定假日',
+            name: item.description || item.name || '?��??�日',
             isHoliday: true,
           };
         }
       });
       setHolidays((prev) => ({ ...prev, ...map }));
     } catch (e) {
-      console.warn('無法讀取假日資料', e);
+      console.warn('?��?讀?��??��???, e);
     }
   }
 
   /** --------------------------------------------------------
-   * 動作處理：刪除與編輯
+   * ?��??��?：刪?��?編輯
    * -------------------------------------------------------- */
   function handleOpenAction(item: CalendarEvent) {
     setActionItem(item);
@@ -163,11 +163,11 @@ export default function CalendarPage() {
 
   async function doDelete() {
     if (!actionItem) return;
-    const { error, data } = await supabase.from('calendar').delete().eq('id', actionItem.id).select();
+    const { error, data } = await supabase.from('p_calendar').delete().eq('id', actionItem.id).select();
     if (error) {
-      alert('刪除失敗：' + error.message);
+      alert('?�除失�?�? + error.message);
     } else if (!data || data.length === 0) {
-      alert('刪除失敗：權限不足或資料不存在 (RLS)');
+      alert('?�除失�?：�??��?足�?資�?不�???(RLS)');
     } else {
       fetchAllData();
     }
@@ -188,12 +188,12 @@ export default function CalendarPage() {
   async function doUpdate() {
     if (!actionItem) return;
     if (!editForm.date || !editForm.title) {
-      alert('日期與標題為必填');
+      alert('?��??��?題為必填');
       return;
     }
 
     const { error, data } = await supabase
-      .from('calendar')
+      .from('p_calendar')
       .update({
         date: editForm.date,
         time: editForm.time || null,
@@ -203,9 +203,9 @@ export default function CalendarPage() {
       .select();
 
     if (error) {
-      alert('更新失敗：' + error.message);
+      alert('?�新失�?�? + error.message);
     } else if (!data || data.length === 0) {
-      alert('更新失敗：權限不足或資料不存在 (RLS)');
+      alert('?�新失�?：�??��?足�?資�?不�???(RLS)');
     } else {
       fetchAllData();
     }
@@ -213,7 +213,7 @@ export default function CalendarPage() {
   }
 
   /** --------------------------------------------------------
-   * 互動邏輯
+   * 互�??�輯
    * -------------------------------------------------------- */
   function goToListAndScroll(dateStr: string) {
     setViewMode('list');
@@ -231,7 +231,7 @@ export default function CalendarPage() {
   }
 
   /** --------------------------------------------------------
-   * 渲染組件：列表模式
+   * 渲�?組件：�?表模�?
    * -------------------------------------------------------- */
   function renderListView() {
     const todayEvents = events.filter(e => e.date === todayStr);
@@ -239,28 +239,28 @@ export default function CalendarPage() {
 
     return (
       <div className="pb-20 space-y-4" ref={listRef}>
-        {/* 今天狀態區塊 — Glass Card (4.2) */}
+        {/* 今天?�?��?�???Glass Card (4.2) */}
         <div className="glass-card p-4">
           <h2 className="font-[family-name:var(--font-headline)] text-lg font-bold mb-2 text-md-on-surface">
-            今天是 {todayStr}
+            今天??{todayStr}
           </h2>
           {todayEvents.length > 0 ? (
             <div className="text-md-on-surface-variant">
-              今日有 {todayEvents.length} 個行程
+              今日??{todayEvents.length} ?��?�?
             </div>
           ) : (
-            <div className="text-md-on-surface-variant">本日無行程</div>
+            <div className="text-md-on-surface-variant">?�日?��?�?/div>
           )}
         </div>
 
         {sortedEvents.length === 0 && (
-          <div className="text-center py-10 text-md-on-surface-variant">尚無任何行程記錄</div>
+          <div className="text-center py-10 text-md-on-surface-variant">尚無任�?行�?記�?</div>
         )}
 
         {sortedEvents.map((evt) => {
           const isPast = evt.date < todayStr;
           const isToday = evt.date === todayStr;
-          const userName = userMap[evt.user_id] || '未知';
+          const userName = userMap[evt.user_id] || '?�知';
 
           return (
             <div
@@ -279,7 +279,7 @@ export default function CalendarPage() {
                         ${isPast ? 'opacity-60 grayscale-[0.5]' : ''}
                     `}
             >
-              {/* 右上角更多按鈕 */}
+              {/* ?��?角更多�???*/}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -303,12 +303,12 @@ export default function CalendarPage() {
                       ${isToday ? 'bg-md-primary/20 text-md-primary' : 'bg-md-surface-container-highest text-md-on-surface-variant'}`}
                   >
                     <Clock className="w-5 h-5 mr-1.5" />
-                    {evt.time ? evt.time.slice(0, 5) : '全天'}
+                    {evt.time ? evt.time.slice(0, 5) : '?�天'}
                   </div>
                 </div>
 
                 <div className="text-xl font-bold leading-relaxed mt-1 text-md-on-surface">
-                  {evt.title || '(無標題)'}
+                  {evt.title || '(?��?�?'}
                 </div>
               </div>
 
@@ -328,14 +328,14 @@ export default function CalendarPage() {
   }
 
   /** --------------------------------------------------------
-   * 渲染組件：月曆模式
+   * 渲�?組件：�??�模�?
    * -------------------------------------------------------- */
   function renderMonthView() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth(); // 0-11
 
     const firstDay = new Date(year, month, 1);
-    const startDayOfWeek = (firstDay.getDay() + 6) % 7; // 週一當作 0
+    const startDayOfWeek = (firstDay.getDay() + 6) % 7; // ?��??��? 0
     const startDayIndex = firstDay.getDay(); // 0=Sun
 
     const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -351,7 +351,7 @@ export default function CalendarPage() {
 
     return (
       <div>
-        {/* 月曆 Header — Glass Card */}
+        {/* ?��? Header ??Glass Card */}
         <div className="glass-card flex items-center justify-between mb-2 p-2">
           <button
             onClick={() => setCurrentDate(new Date(year, month - 1, 1))}
@@ -360,7 +360,7 @@ export default function CalendarPage() {
             <ChevronLeft className="w-5 h-5 text-md-on-surface" />
           </button>
           <div className="font-[family-name:var(--font-headline)] text-lg font-bold text-md-on-surface">
-            {year} 年 {month + 1} 月
+            {year} �?{month + 1} ??
           </div>
           <button
             onClick={() => setCurrentDate(new Date(year, month + 1, 1))}
@@ -370,18 +370,18 @@ export default function CalendarPage() {
           </button>
         </div>
 
-        {/* 星期 Header */}
+        {/* ?��? Header */}
         <div className="grid grid-cols-7 text-center mb-1 font-semibold text-sm text-md-on-surface-variant">
-          <div className="text-md-error">日</div>
+          <div className="text-md-error">??/div>
           <div>一</div>
-          <div>二</div>
-          <div>三</div>
-          <div>四</div>
-          <div>五</div>
-          <div className="text-green-500">六</div>
+          <div>�?/div>
+          <div>�?/div>
+          <div>??/div>
+          <div>�?/div>
+          <div className="text-green-500">??/div>
         </div>
 
-        {/* 格子 — (4.3) bg-md-surface-container rounded-xl + (4.4) holiday styling */}
+        {/* ?��? ??(4.3) bg-md-surface-container rounded-xl + (4.4) holiday styling */}
         <div className="grid grid-cols-7 gap-0.5">
           {cells.map((cell: any) => {
             if (cell.type === 'empty') {
@@ -425,7 +425,7 @@ export default function CalendarPage() {
   }
 
   /** --------------------------------------------------------
-   * 主渲染
+   * 主渲??
    * -------------------------------------------------------- */
   useEffect(() => {
     if (viewMode === 'list' && !loading && events.length > 0) {
@@ -450,7 +450,7 @@ export default function CalendarPage() {
       {/* 4.5: max-w-4xl instead of max-w-md */}
       <div className="p-4 pb-20 max-w-4xl mx-auto w-full flex-1 flex flex-col space-y-4">
 
-        {/* 4.1: Pill Tab 風格切換按鈕 */}
+        {/* 4.1: Pill Tab 風格?��??��? */}
         <div className="flex justify-center">
           <div className="flex bg-md-surface-container-low p-1 rounded-full border border-md-outline-variant/10">
             <button
@@ -462,7 +462,7 @@ export default function CalendarPage() {
                 }`}
             >
               <CalendarDays className="w-4 h-4" />
-              月曆
+              ?��?
             </button>
             <button
               onClick={() => setViewMode('list')}
@@ -473,14 +473,14 @@ export default function CalendarPage() {
                 }`}
             >
               <List className="w-4 h-4" />
-              列表
+              ?�表
             </button>
           </div>
         </div>
 
         {loading ? (
           <div className="flex-1 flex items-center justify-center text-md-on-surface-variant">
-            載入行程中...
+            載入行�?�?..
           </div>
         ) : (
           <>
@@ -490,57 +490,57 @@ export default function CalendarPage() {
         )}
       </div>
 
-      {/* ----------- Modals — Glass Card + backdrop-blur-sm ----------- */}
+      {/* ----------- Modals ??Glass Card + backdrop-blur-sm ----------- */}
 
-      {/* 動作選單 */}
+      {/* ?��??�單 */}
       {showActionMenu && actionItem && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={closeAllModals}>
           <div className="w-full max-w-sm glass-card rounded-2xl overflow-hidden shadow-xl animate-in slide-in-from-bottom-10 fade-in duration-200" onClick={e => e.stopPropagation()}>
-            <div className="p-4 border-b border-md-outline-variant/10 text-center font-bold text-md-on-surface">選擇操作</div>
+            <div className="p-4 border-b border-md-outline-variant/10 text-center font-bold text-md-on-surface">?��??��?</div>
             <div className="flex flex-col">
               <button onClick={onClickEdit} className="flex items-center justify-center gap-2 p-4 border-b border-md-outline-variant/10 text-md-primary font-medium">
-                <Edit className="w-5 h-5" /> 編輯行程
+                <Edit className="w-5 h-5" /> 編輯行�?
               </button>
               <button onClick={onClickDelete} className="flex items-center justify-center gap-2 p-4 text-md-error font-medium">
-                <Trash2 className="w-5 h-5" /> 刪除行程
+                <Trash2 className="w-5 h-5" /> ?�除行�?
               </button>
             </div>
             <div className="p-2 bg-md-surface-container">
               <button onClick={closeAllModals} className="w-full py-3 rounded-xl border border-md-outline-variant font-bold text-md-on-surface glass-card">
-                取消
+                ?��?
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* 刪除確認 */}
+      {/* ?�除確�? */}
       {showDeleteConfirm && actionItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-6">
           <div className="w-full max-w-sm glass-card rounded-2xl p-6 shadow-xl">
-            <h3 className="text-lg font-bold mb-2 text-md-on-surface">確定要刪除嗎？</h3>
+            <h3 className="text-lg font-bold mb-2 text-md-on-surface">確�?要刪?��?�?/h3>
             <p className="mb-6 text-md-on-surface-variant">
-              此動作無法復原，該筆行程將會永久刪除。
+              此�?作無法復?��?該�?行�?將�?永�??�除??
             </p>
             <div className="flex gap-3">
-              <button onClick={closeAllModals} className="flex-1 py-2.5 border border-md-outline-variant rounded-xl font-medium text-md-on-surface">取消</button>
-              <button onClick={doDelete} className="flex-1 py-2.5 bg-md-error text-md-on-error rounded-xl font-medium hover:opacity-90">確定刪除</button>
+              <button onClick={closeAllModals} className="flex-1 py-2.5 border border-md-outline-variant rounded-xl font-medium text-md-on-surface">?��?</button>
+              <button onClick={doDelete} className="flex-1 py-2.5 bg-md-error text-md-on-error rounded-xl font-medium hover:opacity-90">確�??�除</button>
             </div>
           </div>
         </div>
       )}
 
-      {/* 編輯視窗 */}
+      {/* 編輯視�? */}
       {showEditModal && actionItem && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm sm:p-6">
           <div className="w-full max-w-md sm:rounded-2xl rounded-t-2xl p-5 shadow-xl h-[70vh] sm:h-auto flex flex-col glass-card">
             <div className="flex justify-between items-center mb-5">
-              <h3 className="text-xl font-bold text-md-on-surface">編輯行程</h3>
+              <h3 className="text-xl font-bold text-md-on-surface">編輯行�?</h3>
               <button onClick={closeAllModals} className="p-1 rounded-full text-md-on-surface-variant"><X className="w-6 h-6" /></button>
             </div>
             <div className="flex-1 overflow-y-auto space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1 text-md-on-surface-variant">日期</label>
+                <label className="block text-sm font-medium mb-1 text-md-on-surface-variant">?��?</label>
                 <input
                   type="date"
                   value={editForm.date}
@@ -549,7 +549,7 @@ export default function CalendarPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1 text-md-on-surface-variant">時間 (選填)</label>
+                <label className="block text-sm font-medium mb-1 text-md-on-surface-variant">?��? (?�填)</label>
                 <input
                   type="time"
                   value={editForm.time}
@@ -558,7 +558,7 @@ export default function CalendarPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1 text-md-on-surface-variant">項目 (標題)</label>
+                <label className="block text-sm font-medium mb-1 text-md-on-surface-variant">?�目 (標�?)</label>
                 <input
                   type="text"
                   value={editForm.title}
@@ -568,8 +568,8 @@ export default function CalendarPage() {
               </div>
             </div>
             <div className="flex gap-3 mt-6 pt-4 border-t border-md-outline-variant/10">
-              <button onClick={closeAllModals} className="flex-1 py-3 border border-md-outline-variant rounded-xl font-medium text-md-on-surface">取消</button>
-              <button onClick={doUpdate} className="flex-1 py-3 primary-gradient text-md-on-primary rounded-full font-bold kinetic-glow active:scale-[0.98] transition-transform flex items-center justify-center gap-2"><Check className="w-5 h-5" /> 儲存變更</button>
+              <button onClick={closeAllModals} className="flex-1 py-3 border border-md-outline-variant rounded-xl font-medium text-md-on-surface">?��?</button>
+              <button onClick={doUpdate} className="flex-1 py-3 primary-gradient text-md-on-primary rounded-full font-bold kinetic-glow active:scale-[0.98] transition-transform flex items-center justify-center gap-2"><Check className="w-5 h-5" /> ?��?變更</button>
             </div>
           </div>
         </div>

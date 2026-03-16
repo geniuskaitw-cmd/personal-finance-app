@@ -28,23 +28,23 @@ import {
  * Constants & Types
  * -------------------------------------------------------- */
 const CATEGORIES = [
-  '餐飲食品', '交通', '日用品', '娛樂', '醫療', '教育',
-  '住房', '水電瓦斯', '通訊網路', '旅行', '服飾衣物', '雜費'
+  '餐飲食�?', '交�?, '?�用??, '娛�?', '?��?', '?�育',
+  '住房', '水電?�斯', '?��?網路', '?��?', '?�飾�?��', '?�費'
 ];
 
 const CATEGORY_COLORS: Record<string, string> = {
-  '餐飲食品': '#F87171', // Red
-  '交通': '#60A5FA',     // Blue
-  '日用品': '#34D399',   // Green
-  '娛樂': '#FBBF24',     // Yellow
-  '醫療': '#A78BFA',     // Purple
-  '教育': '#F472B6',     // Pink
+  '餐飲食�?': '#F87171', // Red
+  '交�?: '#60A5FA',     // Blue
+  '?�用??: '#34D399',   // Green
+  '娛�?': '#FBBF24',     // Yellow
+  '?��?': '#A78BFA',     // Purple
+  '?�育': '#F472B6',     // Pink
   '住房': '#818CF8',     // Indigo
-  '水電瓦斯': '#FCD34D', // Amber
-  '通訊網路': '#6EE7B7', // Emerald
-  '旅行': '#38BDF8',     // Sky
-  '服飾衣物': '#C084FC', // Violet
-  '雜費': '#9CA3AF',     // Gray
+  '水電?�斯': '#FCD34D', // Amber
+  '?��?網路': '#6EE7B7', // Emerald
+  '?��?': '#38BDF8',     // Sky
+  '?�飾�?��': '#C084FC', // Violet
+  '?�費': '#9CA3AF',     // Gray
   'default': '#CBD5E1'
 };
 
@@ -56,18 +56,18 @@ function getCategoryColor(cat: string) {
 function CategoryIcon({ category, className }: { category: string, className?: string }) {
   const props = { className: className || "w-6 h-6" };
   switch (category) {
-    case '餐飲食品': return <Utensils {...props} />;
-    case '交通': return <Car {...props} />;
-    case '日用品': return <ShoppingBag {...props} />;
-    case '娛樂': return <Gamepad2 {...props} />;
-    case '醫療': return <Stethoscope {...props} />;
-    case '教育': return <GraduationCap {...props} />;
+    case '餐飲食�?': return <Utensils {...props} />;
+    case '交�?: return <Car {...props} />;
+    case '?�用??: return <ShoppingBag {...props} />;
+    case '娛�?': return <Gamepad2 {...props} />;
+    case '?��?': return <Stethoscope {...props} />;
+    case '?�育': return <GraduationCap {...props} />;
     case '住房': return <Home {...props} />;
-    case '水電瓦斯': return <Lamp {...props} />;
-    case '通訊網路': return <Wifi {...props} />;
-    case '旅行': return <Plane {...props} />;
-    case '服飾衣物': return <Shirt {...props} />;
-    case '雜費': return <Gift {...props} />;
+    case '水電?�斯': return <Lamp {...props} />;
+    case '?��?網路': return <Wifi {...props} />;
+    case '?��?': return <Plane {...props} />;
+    case '?�飾�?��': return <Shirt {...props} />;
+    case '?�費': return <Gift {...props} />;
     default: return <CircleHelp {...props} />;
   }
 }
@@ -80,7 +80,7 @@ type CategoryStat = {
 };
 
 /** --------------------------------------------------------
- * Donut Chart Component (SVG Path) — 6.1 styling updates
+ * Donut Chart Component (SVG Path) ??6.1 styling updates
  * -------------------------------------------------------- */
 function DonutChart({ data, total }: { data: CategoryStat[], total: number }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -118,7 +118,7 @@ function DonutChart({ data, total }: { data: CategoryStat[], total: number }) {
 
   // Center Text Logic
   const activeItem = activeIndex !== null ? data[activeIndex] : null;
-  const centerLabel = activeItem ? activeItem.category : "總支出";
+  const centerLabel = activeItem ? activeItem.category : "總支??;
   const centerValue = activeItem
     ? `${activeItem.percentage.toFixed(1)}%`
     : `${total.toLocaleString()}`;
@@ -128,7 +128,7 @@ function DonutChart({ data, total }: { data: CategoryStat[], total: number }) {
     return (
       <div className="relative w-52 h-52 mx-auto flex items-center justify-center">
         <div className="absolute inset-0 rounded-full border-[16px] border-md-surface-container-highest"></div>
-        <div className="text-sm text-md-on-surface-variant">本月無支出</div>
+        <div className="text-sm text-md-on-surface-variant">?��??�支??/div>
       </div>
     );
   }
@@ -172,14 +172,14 @@ function DonutChart({ data, total }: { data: CategoryStat[], total: number }) {
 }
 
 /** --------------------------------------------------------
- * Trend Chart Component — styling updates
+ * Trend Chart Component ??styling updates
  * -------------------------------------------------------- */
 function TrendChart({ data, category }: { data: { month: string, total: number }[], category: string }) {
   const max = Math.max(...data.map(d => d.total), 1);
   const color = getCategoryColor(category);
   const [activeBar, setActiveBar] = useState<number | null>(null);
 
-  if (data.length === 0) return <div className="h-48 flex items-center justify-center text-md-on-surface-variant">無資料</div>;
+  if (data.length === 0) return <div className="h-48 flex items-center justify-center text-md-on-surface-variant">?��???/div>;
 
   return (
     <div className="w-full overflow-x-auto pb-2 touch-pan-x no-scrollbar">
@@ -240,15 +240,15 @@ export default function StatsPage() {
   // Init trend range when category selected (default last 6 months)
   useEffect(() => {
     if (selectedCategory) {
-      // 使用本地時間計算，避免 UTC 時區差異導致月份錯誤
+      // 使用?�地?��?計�?，避??UTC ?��?差異導致?�份?�誤
       const now = new Date();
 
-      // 結束月份：當前月份
+      // 結�??�份：當?��?�?
       const endYear = now.getFullYear();
       const endMonth = now.getMonth() + 1;
 
-      // 開始月份：5個月前
-      // 邏輯：建立一個日期在當月1號，然後扣掉5個月
+      // ?��??�份�??��???
+      // ?�輯：建立�??�日?�在?��?1?��??��????5?��?
       const startObj = new Date(endYear, now.getMonth() - 5, 1);
       const startYear = startObj.getFullYear();
       const startMonth = startObj.getMonth() + 1;
@@ -272,7 +272,7 @@ export default function StatsPage() {
     async function fetchStats() {
       setLoading(true);
       const { data, error } = await supabase
-        .from('expenses')
+        .from('p_expenses')
         .select('amount, category')
         .like('time', `${currentMonthStr}%`);
 
@@ -287,7 +287,7 @@ export default function StatsPage() {
       const map: Record<string, number> = {};
       let total = 0;
       data.forEach((item: any) => {
-        const cat = item.category || '未分類';
+        const cat = item.category || '?��?�?;
         const amt = Number(item.amount) || 0;
         if (cat) {
           map[cat] = (map[cat] || 0) + amt;
@@ -335,7 +335,7 @@ export default function StatsPage() {
       const endStr = `${nextY}-${String(nextM).padStart(2, '0')}-01`;
 
       const { data, error } = await supabase
-        .from('expenses')
+        .from('p_expenses')
         .select('amount, time')
         .eq('category', selectedCategory)
         .gte('time', startStr)
@@ -396,30 +396,30 @@ export default function StatsPage() {
     <div className="min-h-screen flex flex-col bg-md-background">
       <div className="p-4 max-w-4xl mx-auto w-full flex-1 flex flex-col">
 
-        {/* 標題與月份切換 — Glass Card month switcher */}
+        {/* 標�??��?份�?????Glass Card month switcher */}
         <div className="glass-card p-3 flex items-center justify-between mb-6">
           <button onClick={prevMonth} className="p-3 hover:bg-md-surface-container-highest rounded-full transition-colors">
             <ChevronLeft className="w-6 h-6 stroke-[3] text-md-primary" />
           </button>
           <div className="font-[family-name:var(--font-headline)] text-xl font-bold text-md-on-surface">
-            {currentMonth.getFullYear()} 年 {currentMonth.getMonth() + 1} 月
+            {currentMonth.getFullYear()} �?{currentMonth.getMonth() + 1} ??
           </div>
           <button onClick={nextMonth} className="p-3 hover:bg-md-surface-container-highest rounded-full transition-colors">
             <ChevronRight className="w-6 h-6 stroke-[3] text-md-primary" />
           </button>
         </div>
 
-        {/* 圓餅圖 — 6.1 Glass Card + Kinetic Glow */}
+        {/* ?��?????6.1 Glass Card + Kinetic Glow */}
         <div className="glass-card kinetic-glow p-6 mb-6 flex justify-center">
           <DonutChart data={stats} total={monthTotal} />
         </div>
 
-        {/* 分類列表 — 6.2 Glass Card + 6.3 Progress bar */}
+        {/* ?��??�表 ??6.2 Glass Card + 6.3 Progress bar */}
         <div className="space-y-3 pb-20">
           {loading ? (
-            <div className="text-center py-10 text-md-on-surface-variant">計算中...</div>
+            <div className="text-center py-10 text-md-on-surface-variant">計�?�?..</div>
           ) : stats.length === 0 ? (
-            <div className="text-center py-10 text-md-on-surface-variant">本月尚無資料</div>
+            <div className="text-center py-10 text-md-on-surface-variant">?��?尚無資�?</div>
           ) : (
             stats.map((stat) => (
               <div
@@ -439,7 +439,7 @@ export default function StatsPage() {
                     <div className="text-md-on-surface font-bold">${stat.total.toLocaleString()}</div>
                   </div>
 
-                  {/* Progress Bar — 6.3 bg-md-surface-container-low */}
+                  {/* Progress Bar ??6.3 bg-md-surface-container-low */}
                   <div className="flex items-center gap-2">
                     <div className="flex-1 h-2 rounded-full overflow-hidden bg-md-surface-container-low">
                       <div
@@ -458,7 +458,7 @@ export default function StatsPage() {
         </div>
       </div>
 
-      {/* Trend Modal — 6.4 Glass Card + backdrop-blur-sm overlay */}
+      {/* Trend Modal ??6.4 Glass Card + backdrop-blur-sm overlay */}
       {selectedCategory && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-sm" onClick={() => setSelectedCategory(null)}>
           <div className="w-full max-w-4xl glass-card rounded-t-3xl p-6 shadow-xl animate-in slide-in-from-bottom-10 flex flex-col max-h-[85vh]" onClick={e => e.stopPropagation()}>
@@ -489,7 +489,7 @@ export default function StatsPage() {
                     if (!newStart) return;
 
                     setTrendRange(p => {
-                      // 加 -01 確保跨瀏覽器解析正確
+                      // ??-01 確�?跨瀏覽?�解?�正�?
                       const s = new Date(newStart + '-01');
                       const e = new Date(p.end + '-01');
                       const months = (e.getFullYear() - s.getFullYear()) * 12 + (e.getMonth() - s.getMonth());
@@ -534,14 +534,14 @@ export default function StatsPage() {
 
             <div className="bg-md-surface-container-low rounded-2xl p-4 flex-1 min-h-[200px] overflow-hidden flex flex-col">
               {trendLoading ? (
-                <div className="h-full flex items-center justify-center text-md-on-surface-variant">載入中...</div>
+                <div className="h-full flex items-center justify-center text-md-on-surface-variant">載入�?..</div>
               ) : (
                 <TrendChart data={trendData} category={selectedCategory} />
               )}
             </div>
 
             <div className="mt-6 text-center text-md-on-surface-variant text-sm">
-              點擊其他區域關閉
+              點�??��??�?��???
             </div>
           </div>
         </div>
