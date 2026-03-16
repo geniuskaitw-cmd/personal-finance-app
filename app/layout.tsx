@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Space_Grotesk, Inter } from 'next/font/google';
-import { Wallet } from 'lucide-react';
+import { Wallet, LayoutGrid } from 'lucide-react';
 import BottomNav from './components/BottomNav';
 import './globals.css';
 
@@ -41,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="zh-Hant" className={`${spaceGrotesk.variable} ${inter.variable}`}>
       <head>
-        <link rel="apple-touch-icon" href="/icon.svg" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <meta name="theme-color" content="#0e131d" />
       </head>
       <body className="bg-md-background text-md-on-surface min-h-screen">
@@ -55,9 +55,15 @@ export default function RootLayout({
         <header className="sticky top-0 z-50 bg-md-background/80 backdrop-blur-md border-b border-md-outline-variant/10">
           <div className="max-w-4xl mx-auto flex items-center gap-3 px-4 py-3">
             <Wallet className="w-6 h-6 text-md-primary" />
-            <h1 className="font-[family-name:var(--font-headline)] text-lg font-semibold tracking-tight text-md-on-surface">
+            <h1 className="font-[family-name:var(--font-headline)] text-lg font-semibold tracking-tight text-md-on-surface flex-1">
               私人秘書
             </h1>
+            <a
+              href="/monthly"
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-md-surface-container-highest text-md-on-surface transition-colors hover:bg-md-surface-container-high"
+            >
+              <LayoutGrid className="w-5 h-5" />
+            </a>
           </div>
         </header>
 

@@ -19,7 +19,6 @@ import {
   CircleHelp,
   ChevronLeft,
   ChevronRight,
-  LayoutGrid,
   MoreVertical,
   Edit,
   Trash2,
@@ -395,13 +394,6 @@ function TodayPageContent() {
             </div>
             <div className="absolute -right-20 -top-20 w-64 h-64 primary-gradient opacity-10 rounded-full blur-[100px]" />
           </section>
-
-          <a
-            href="/monthly"
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-md-surface-container-highest text-md-on-surface transition-colors hover:bg-md-surface-container-high"
-          >
-            <LayoutGrid className="w-5 h-5" />
-          </a>
         </div>
 
         {/* Date Selector */}
