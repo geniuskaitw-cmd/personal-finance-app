@@ -292,9 +292,9 @@ function TodayPageContent() {
                     <div className="text-sm text-muted-foreground mt-0.5">
                       {item.time}（{getWeekdayLabel(item.time)}）
                     </div>
-                    {/* Row 3: message + userName */}
+                    {/* Row 3: note + userName */}
                     <div className="flex justify-between items-center text-xs text-muted-foreground mt-1">
-                      <span className="truncate">{item.message || ''}</span>
+                      <span className="truncate">{item.note || ''}</span>
                       <span className="whitespace-nowrap ml-2">{userName}</span>
                     </div>
                   </div>
