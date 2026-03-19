@@ -32,11 +32,9 @@ export default function CalendarPage() {
   function getTodayStr() { return new Date().toLocaleString('sv-SE', { timeZone: 'Asia/Taipei' }).slice(0, 10); }
   const todayStr = getTodayStr();
 
-  useEffect(() => { fetchAllData(); fetchUserNames(); const y = new Date().getFullYear(); fetchHolidays(y); fetchHolidays(y + 1); }, []);
-
   async function fetchUserNames() {
     const { data } = await supabase.from('p_user_names').select('user_id, display_name');
-    if (data) { const map: Record<string, string> = {}; data.forEach((u: any) => (map[u.user_id] = u.display_name)); setUserMap(map); }
+    if (data) { const map: Record<string, string> = {}; data.forEach((u: { user_id: string; display_name: string }) => (map[u.user_id] = u.display_name)); setUserMap(map); }
   }
 
   async function fetchAllData() {
@@ -53,7 +51,7 @@ export default function CalendarPage() {
       if (!res.ok) return;
       const list = await res.json();
       const map: Record<string, Holiday> = {};
-      list.forEach((item: any) => {
+      list.forEach((item: { date: string; isHoliday: boolean; description?: string; name?: string }) => {
         let dStr = item.date;
         if (dStr && !dStr.includes('-') && dStr.length === 8) dStr = `${dStr.slice(0, 4)}-${dStr.slice(4, 6)}-${dStr.slice(6, 8)}`;
         if (item.isHoliday) map[dStr] = { date: dStr, name: item.description || item.name || '國定假日', isHoliday: true };
@@ -61,6 +59,8 @@ export default function CalendarPage() {
       setHolidays((prev) => ({ ...prev, ...map }));
     } catch (e) { console.warn('無法讀取假日資料', e); }
   }
+
+  useEffect(() => { fetchAllData(); fetchUserNames(); const y = new Date().getFullYear(); fetchHolidays(y); fetchHolidays(y + 1); }, []);
 
   function handleOpenAction(item: CalendarEvent) { setActionItem(item); setShowActionMenu(true); }
   function closeAllModals() { setActionItem(null); setShowActionMenu(false); setShowDeleteConfirm(false); setShowEditModal(false); }
@@ -261,7 +261,7 @@ export default function CalendarPage() {
 
       {showEditModal && actionItem && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm sm:p-6">
-          <div className="w-full max-w-md sm:rounded-md rounded-t-md p-5 shadow-xl h-[70vh] sm:h-auto flex flex-col brutalist-card">
+          <div className="w-full max-w-md sm:rounded-md rounded-t-md p-5 shadow-xl max-h-[70vh] sm:max-h-none flex flex-col brutalist-card">
             <div className="flex justify-between items-center mb-5">
               <h3 className="text-xl font-bold text-foreground">編輯行程</h3>
               <button onClick={closeAllModals} className="p-1 rounded-md text-muted-foreground"><X className="w-6 h-6" /></button>

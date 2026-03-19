@@ -4,8 +4,8 @@
   "description": "\u5BB6\u5EAD\u8A18\u5E33\u8207\u884C\u4E8B\u66C6\u79C1\u4EBA\u79D8\u66F8",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0e131d",
-  "theme_color": "#0e131d",
+  "background_color": "#f0e8d8",
+  "theme_color": "#6d28d9",
   "orientation": "portrait",
   "icons": [
     {

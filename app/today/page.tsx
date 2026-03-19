@@ -36,7 +36,10 @@ function getToday() {
 function shiftDate(dateStr: string, days: number) {
   const d = new Date(dateStr + 'T00:00:00');
   d.setDate(d.getDate() + days);
-  return d.toISOString().slice(0, 10);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${dd}`;
 }
 
 function getWeekRange(dateStr: string) {
@@ -104,7 +107,7 @@ function TodayPageContent() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editForm, setEditForm] = useState({ category: '', amount: '', note: '' });
 
-  useEffect(() => { if (paramDate) setSelectedDate(paramDate); }, [paramDate]);
+  useEffect(() => { if (paramDate && paramDate !== selectedDate) setSelectedDate(paramDate); }, [paramDate]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Load name map
   useEffect(() => {
@@ -281,18 +284,18 @@ function TodayPageContent() {
                     {/* Row 1: category + amount */}
                     <div className="flex justify-between items-center">
                       <div className="font-bold text-foreground truncate">{item.category || '未分類'}</div>
-                      <div className={`font-bold whitespace-nowrap ml-2 ${(item.amount || 0) >= 0 ? 'text-positive' : 'text-destructive'}`}>
+                      <div className={`text-lg font-bold whitespace-nowrap ml-2 ${(item.amount || 0) >= 0 ? 'text-positive' : 'text-destructive'}`}>
                         {formatAmount(item.amount || 0)}
                       </div>
                     </div>
-                    {/* Row 2: message */}
-                    {item.message && (
-                      <div className="text-sm text-foreground mt-0.5 truncate">{item.message}</div>
-                    )}
-                    {/* Row 3: user + note */}
-                    <div className="text-xs text-muted-foreground mt-1">
-                      <span>{userName}</span>
-                      {item.note && <span className="ml-2">· {item.note}</span>}
+                    {/* Row 2: date + weekday */}
+                    <div className="text-sm text-muted-foreground mt-0.5">
+                      {item.time}（{getWeekdayLabel(item.time)}）
+                    </div>
+                    {/* Row 3: message + userName */}
+                    <div className="flex justify-between items-center text-xs text-muted-foreground mt-1">
+                      <span className="truncate">{item.message || ''}</span>
+                      <span className="whitespace-nowrap ml-2">{userName}</span>
                     </div>
                   </div>
                 </div>
@@ -340,7 +343,7 @@ function TodayPageContent() {
       {/* Edit modal */}
       {showEditModal && actionItem && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm sm:p-6">
-          <div className="w-full max-w-md sm:rounded-md rounded-t-md p-5 shadow-xl h-[70vh] sm:h-auto flex flex-col brutalist-card">
+          <div className="w-full max-w-md sm:rounded-md rounded-t-md p-5 shadow-xl max-h-[70vh] sm:max-h-none flex flex-col brutalist-card">
             <div className="flex justify-between items-center mb-5">
               <h3 className="text-xl font-bold text-foreground">編輯記帳</h3>
               <button onClick={closeAllModals} className="p-1 rounded-md text-muted-foreground"><X className="w-6 h-6" /></button>
