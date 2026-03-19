@@ -232,7 +232,7 @@ export default function CalendarPage() {
       </div>
 
       {showActionMenu && actionItem && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={closeAllModals}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={closeAllModals}>
           <div className="w-full max-w-sm brutalist-card overflow-hidden shadow-xl" onClick={e => e.stopPropagation()}>
             <div className="p-4 border-b-2 border-primary/30 text-center font-bold text-foreground">選擇操作</div>
             <div className="flex flex-col">
