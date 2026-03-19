@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase';
 import {
   ChevronLeft, ChevronRight, PieChart, TrendingUp, X,
   Car, Utensils, ShoppingBag, Gamepad2, Stethoscope, GraduationCap,
-  Home, Lamp, Wifi, Plane, Shirt, Gift, CircleHelp,
+  Home, Lamp, Wifi, Plane, Shirt, Gift, Coins,
   Calendar as CalendarIcon,
 } from 'lucide-react';
 
@@ -19,7 +19,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   '娛樂': '#FBBF24', '醫療': '#A78BFA', '教育': '#F472B6',
   '住房': '#818CF8', '水電瓦斯': '#FCD34D', '電信網路': '#6EE7B7',
   '旅遊': '#38BDF8', '服飾美妝': '#C084FC', '送費': '#9CA3AF',
-  'default': '#CBD5E1',
+  '雜費': '#78716C', 'default': '#CBD5E1',
 };
 
 function getCategoryColor(cat: string) { return CATEGORY_COLORS[cat] || CATEGORY_COLORS['default']; }
@@ -39,7 +39,8 @@ function CategoryIcon({ category, className }: { category: string; className?: s
     case '旅遊': return <Plane {...props} />;
     case '服飾美妝': return <Shirt {...props} />;
     case '送費': return <Gift {...props} />;
-    default: return <CircleHelp {...props} />;
+    case '雜費': return <Coins {...props} />;
+    default: return <Coins {...props} />;
   }
 }
 

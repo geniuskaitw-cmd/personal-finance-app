@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import {
   Car, Utensils, ShoppingBag, Gamepad2, Stethoscope, GraduationCap,
-  Home, Lamp, Wifi, Plane, Shirt, Gift, CircleHelp,
+  Home, Lamp, Wifi, Plane, Shirt, Gift, Coins,
   ChevronLeft, ChevronRight, MoreVertical, Edit, Trash2, X, Check, BarChart3,
 } from 'lucide-react';
 
@@ -26,7 +26,7 @@ const NAME_MAP_KEY = 'finance_user_name_map';
 
 const CATEGORIES = [
   '餐飲食品', '交通', '日用品', '娛樂', '醫療', '教育',
-  '住房', '水電瓦斯', '電信網路', '旅遊', '服飾美妝', '送費',
+  '住房', '水電瓦斯', '電信網路', '旅遊', '服飾美妝', '送費', '雜費',
 ];
 
 function getToday() {
@@ -81,7 +81,8 @@ function CategoryIcon({ category, className }: { category: string; className?: s
     case '旅遊': return <Plane {...props} />;
     case '服飾美妝': return <Shirt {...props} />;
     case '送費': return <Gift {...props} />;
-    default: return <CircleHelp {...props} />;
+    case '雜費': return <Coins {...props} />;
+    default: return <Coins {...props} />;
   }
 }
 
@@ -93,7 +94,6 @@ function TodayPageContent() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
   const [nameMap, setNameMap] = useState<NameMap>({});
-  const [filterUser, setFilterUser] = useState<string>('all');
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [rangeMode, setRangeMode] = useState<'day' | 'week' | 'month'>('day');
 
@@ -116,7 +116,7 @@ function TodayPageContent() {
       const { data } = await supabase.from('p_user_names').select('user_id, display_name');
       if (data) {
         const map: NameMap = {};
-        data.forEach((u: any) => (map[u.user_id] = u.display_name));
+        data.forEach((u: { user_id: string; display_name: string }) => (map[u.user_id] = u.display_name));
         setNameMap(map);
         try { localStorage.setItem(NAME_MAP_KEY, JSON.stringify(map)); } catch {}
       }
@@ -151,14 +151,12 @@ function TodayPageContent() {
 
   const filtered = useMemo(() => {
     return expenses.filter((e) => {
-      if (filterUser !== 'all' && e.user_id !== filterUser) return false;
       if (filterCategory !== 'all' && e.category !== filterCategory) return false;
       return true;
     });
-  }, [expenses, filterUser, filterCategory]);
+  }, [expenses, filterCategory]);
 
   const totalAmount = useMemo(() => filtered.reduce((s, e) => s + (e.amount || 0), 0), [filtered]);
-  const userIds = useMemo(() => [...new Set(expenses.map((e) => e.user_id))], [expenses]);
   const usedCategories = useMemo(() => [...new Set(expenses.map((e) => e.category).filter(Boolean))], [expenses]);
 
   // Action handlers
@@ -243,13 +241,8 @@ function TodayPageContent() {
           </div>
         </div>
 
-        {/* Filters */}
+        {/* Category filter only */}
         <div className="flex gap-2 overflow-x-auto no-scrollbar">
-          <select value={filterUser} onChange={(e) => setFilterUser(e.target.value)}
-            className="brutalist-card px-3 py-1.5 text-sm text-foreground min-w-0">
-            <option value="all">全部人員</option>
-            {userIds.map((uid) => <option key={uid} value={uid}>{nameMap[uid] || uid}</option>)}
-          </select>
           <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}
             className="brutalist-card px-3 py-1.5 text-sm text-foreground min-w-0">
             <option value="all">全部分類</option>
@@ -272,23 +265,32 @@ function TodayPageContent() {
               return (
                 <div key={item.id}
                   onContextMenu={(e) => { e.preventDefault(); handleOpenAction(item); }}
-                  className="brutalist-card p-4 flex items-start gap-3 transition-all active:scale-[0.98] select-none relative">
+                  className="brutalist-card p-4 flex items-center gap-3 transition-all active:scale-[0.98] select-none relative">
                   <button onClick={(e) => { e.stopPropagation(); handleOpenAction(item); }}
                     className="absolute top-2 right-2 p-1 rounded-md text-muted-foreground z-10">
                     <MoreVertical className="w-4 h-4" />
                   </button>
+
+                  {/* Category icon */}
                   <div className="w-10 h-10 rounded-md border-2 border-primary/50 flex items-center justify-center text-primary shrink-0">
                     <CategoryIcon category={item.category || ''} />
                   </div>
+
+                  {/* Content */}
                   <div className="flex-1 min-w-0 pr-6">
-                    <div className="flex justify-between items-start">
-                      <div className="font-bold text-foreground truncate">{item.message || item.category || '未分類'}</div>
+                    {/* Row 1: category + amount */}
+                    <div className="flex justify-between items-center">
+                      <div className="font-bold text-foreground truncate">{item.category || '未分類'}</div>
                       <div className={`font-bold whitespace-nowrap ml-2 ${(item.amount || 0) >= 0 ? 'text-positive' : 'text-destructive'}`}>
                         {formatAmount(item.amount || 0)}
                       </div>
                     </div>
-                    <div className="text-sm text-muted-foreground mt-1">
-                      {item.category && <span className="mr-2">{item.category}</span>}
+                    {/* Row 2: message */}
+                    {item.message && (
+                      <div className="text-sm text-foreground mt-0.5 truncate">{item.message}</div>
+                    )}
+                    {/* Row 3: user + note */}
+                    <div className="text-xs text-muted-foreground mt-1">
                       <span>{userName}</span>
                       {item.note && <span className="ml-2">· {item.note}</span>}
                     </div>
