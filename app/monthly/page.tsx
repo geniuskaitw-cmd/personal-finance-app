@@ -30,11 +30,7 @@ export default function MonthlyPage() {
   const [budget, setBudget] = useState<number>(0);
 
   async function loadBudget() {
-    const { data, error } = await supabase
-      .from('p_budgets')
-      .select('budget')
-      .order('id', { ascending: false })
-      .limit(1);
+    const { data, error } = await supabase.from('p_budgets').select('budget').order('id', { ascending: false }).limit(1);
     if (error) { console.error('loadBudget error', error); return; }
     if (data && data.length > 0) setBudget(data[0].budget);
     else setBudget(0);
@@ -42,12 +38,8 @@ export default function MonthlyPage() {
 
   async function loadMonthData(year: number, month: number) {
     const yyyyMm = `${year}-${String(month + 1).padStart(2, '0')}`;
-    const { data, error } = await supabase
-      .from('p_expenses')
-      .select('*')
-      .like('time', `${yyyyMm}%`);
+    const { data, error } = await supabase.from('p_expenses').select('*').like('time', `${yyyyMm}%`);
     if (error) return console.error(error);
-
     const sums: Record<string, number> = {};
     let total = 0;
     (data || []).forEach((item) => {
@@ -72,78 +64,55 @@ export default function MonthlyPage() {
   }
 
   function prevMonth() {
-    let y = current.year;
-    let m = current.month - 1;
+    let y = current.year, m = current.month - 1;
     if (m < 0) { m = 11; y -= 1; }
-    setCurrent({ year: y, month: m });
-    loadMonthData(y, m);
-    loadBudget();
+    setCurrent({ year: y, month: m }); loadMonthData(y, m); loadBudget();
   }
 
   function nextMonth() {
-    let y = current.year;
-    let m = current.month + 1;
+    let y = current.year, m = current.month + 1;
     if (m > 11) { m = 0; y += 1; }
-    setCurrent({ year: y, month: m });
-    loadMonthData(y, m);
-    loadBudget();
+    setCurrent({ year: y, month: m }); loadMonthData(y, m); loadBudget();
   }
 
-  useEffect(() => {
-    loadMonthData(current.year, current.month);
-    loadBudget();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useEffect(() => { loadMonthData(current.year, current.month); loadBudget(); }, []);
 
   function amountColor(n: number) {
-    if (n > 0) return 'text-emerald-600';
-    if (n < 0) return 'text-md-error';
-    return 'text-md-on-surface-variant';
+    if (n > 0) return 'text-positive';
+    if (n < 0) return 'text-destructive';
+    return 'text-muted-foreground';
   }
 
   const remaining = budget - monthTotal;
 
   return (
     <div className="p-4 max-w-4xl mx-auto">
-      <div className="glass-card p-3 flex items-center justify-between mb-6">
-        <button onClick={prevMonth} className="p-3 hover:bg-md-surface-container-highest rounded-full transition-colors">
-          <ChevronLeft className="w-6 h-6 stroke-[3] text-md-primary" />
+      <div className="brutalist-card p-3 flex items-center justify-between mb-6">
+        <button onClick={prevMonth} className="p-3 hover:bg-accent rounded-md transition-colors">
+          <ChevronLeft className="w-6 h-6 stroke-[3] text-primary" />
         </button>
-        <div className="font-[family-name:var(--font-headline)] text-xl font-bold text-md-on-surface">
-          {current.year} 年 {current.month + 1} 月
-        </div>
-        <button onClick={nextMonth} className="p-3 hover:bg-md-surface-container-highest rounded-full transition-colors">
-          <ChevronRight className="w-6 h-6 stroke-[3] text-md-primary" />
+        <div className="text-xl font-bold text-foreground">{current.year} 年 {current.month + 1} 月</div>
+        <button onClick={nextMonth} className="p-3 hover:bg-accent rounded-md transition-colors">
+          <ChevronRight className="w-6 h-6 stroke-[3] text-primary" />
         </button>
       </div>
 
-      <div className="grid grid-cols-7 text-center text-xs font-semibold mb-2 text-md-on-surface-variant uppercase tracking-widest">
-        <div>一</div>
-        <div>二</div>
-        <div>三</div>
-        <div>四</div>
-        <div>五</div>
-        <div>六</div>
-        <div>日</div>
+      <div className="grid grid-cols-7 text-center text-xs font-semibold mb-2 text-muted-foreground uppercase tracking-widest">
+        <div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div><div>日</div>
       </div>
 
       <div className="grid grid-cols-7 gap-2 text-center text-sm">
         {getCalendarMatrix(current.year, current.month).map((day, idx) => {
-          if (!day) {
-            return <div key={idx} className="h-12 bg-md-surface-container-low rounded-xl" />;
-          }
+          if (!day) return <div key={idx} className="h-12 bg-muted rounded-md" />;
           const dateStr = `${current.year}-${String(current.month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
           const sum = daySums[dateStr] ?? 0;
           const isToday = todayDate && dateStr === todayStr && current.year === todayDate.getFullYear() && current.month === todayDate.getMonth();
-
           return (
             <Link key={idx} href={`/today?date=${dateStr}`}
-              className={`h-12 flex flex-col items-center justify-center rounded-xl transition-colors ${isToday ? 'bg-md-primary-container text-md-on-primary font-bold' : 'bg-md-surface-container-high text-md-on-surface'}`}>
+              className={`h-12 flex flex-col items-center justify-center rounded-md border-2 transition-colors ${isToday ? 'bg-primary text-primary-foreground font-bold border-primary' : 'bg-card text-foreground border-primary/20 hover:border-primary/50'}`}>
               <div className="leading-none">{day}</div>
               {sum !== 0 && (
-                <div className={`text-[10px] leading-none mt-0.5 ${isToday ? 'text-md-on-primary' : amountColor(sum)}`}>
-                  {sum.toLocaleString()}
-                </div>
+                <div className={`text-[10px] leading-none mt-0.5 ${isToday ? 'text-primary-foreground' : amountColor(sum)}`}>{sum.toLocaleString()}</div>
               )}
             </Link>
           );
@@ -151,23 +120,17 @@ export default function MonthlyPage() {
       </div>
 
       <div className="mt-6 grid grid-cols-3 gap-3">
-        <div className="glass-card p-4 flex flex-col items-center">
-          <span className="text-xs text-md-on-surface-variant mb-1">本月預算</span>
-          <span className="font-[family-name:var(--font-headline)] text-lg font-bold text-md-on-surface">
-            {(budget || 0).toLocaleString()}
-          </span>
+        <div className="brutalist-card p-4 flex flex-col items-center">
+          <span className="text-xs text-muted-foreground mb-1">本月預算</span>
+          <span className="text-lg font-bold text-foreground">{(budget || 0).toLocaleString()}</span>
         </div>
-        <div className="glass-card p-4 flex flex-col items-center">
-          <span className="text-xs text-md-on-surface-variant mb-1">本月消費</span>
-          <span className={`font-[family-name:var(--font-headline)] text-lg font-bold ${amountColor(monthTotal)}`}>
-            {monthTotal.toLocaleString()}
-          </span>
+        <div className="brutalist-card p-4 flex flex-col items-center">
+          <span className="text-xs text-muted-foreground mb-1">本月消費</span>
+          <span className={`text-lg font-bold ${amountColor(monthTotal)}`}>{monthTotal.toLocaleString()}</span>
         </div>
-        <div className="glass-card p-4 flex flex-col items-center">
-          <span className="text-xs text-md-on-surface-variant mb-1">本月餘額</span>
-          <span className={`font-[family-name:var(--font-headline)] text-lg font-bold ${remaining < 0 ? 'text-md-error' : 'text-md-on-surface'}`}>
-            {remaining.toLocaleString()}
-          </span>
+        <div className="brutalist-card p-4 flex flex-col items-center">
+          <span className="text-xs text-muted-foreground mb-1">本月餘額</span>
+          <span className={`text-lg font-bold ${remaining < 0 ? 'text-destructive' : 'text-foreground'}`}>{remaining.toLocaleString()}</span>
         </div>
       </div>
     </div>

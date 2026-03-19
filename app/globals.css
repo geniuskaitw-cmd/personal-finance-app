@@ -1,104 +1,60 @@
 @import "tailwindcss";
 
 /* ============================================
-   1. Design Token System — Dark Theme (default)
+   1. Design Token System — Light Theme (default)
+   Cream/beige background with purple accents
    ============================================ */
 :root {
-  /* Core colors */
-  --md-background: #0e131d;
-  --md-on-surface: #dee2f1;
-  --md-primary: #c3f5ff;
-  --md-primary-container: #00e5ff;
-  --md-primary-fixed-dim: #00daf3;
-  --md-secondary: #b8c3ff;
-  --md-secondary-container: #0043eb;
-  --md-tertiary: #ffeac0;
-  --md-tertiary-container: #fec931;
-  --md-tertiary-fixed-dim: #f3bf26;
-  --md-error: #ffb4ab;
-  --md-error-container: #93000a;
+  --background: oklch(0.96 0.02 90);
+  --foreground: oklch(0.35 0.08 280);
+  --card: oklch(0.97 0.015 90);
+  --card-foreground: oklch(0.35 0.08 280);
+  --primary: oklch(0.55 0.18 280);
+  --primary-foreground: oklch(0.97 0.015 90);
+  --secondary: oklch(0.92 0.03 90);
+  --secondary-foreground: oklch(0.35 0.08 280);
+  --muted: oklch(0.93 0.02 90);
+  --muted-foreground: oklch(0.5 0.06 280);
+  --accent: oklch(0.9 0.04 90);
+  --accent-foreground: oklch(0.35 0.08 280);
+  --destructive: oklch(0.55 0.2 25);
+  --destructive-foreground: oklch(0.98 0.01 90);
+  --border: oklch(0.55 0.18 280);
+  --input: oklch(0.55 0.18 280);
+  --ring: oklch(0.55 0.18 280);
+  --radius: 0.5rem;
 
-  /* Surface levels */
-  --md-surface: #0e131d;
-  --md-surface-container-lowest: #090e18;
-  --md-surface-container-low: #171c26;
-  --md-surface-container: #1b202a;
-  --md-surface-container-high: #252a35;
-  --md-surface-container-highest: #303540;
-  --md-surface-bright: #343945;
+  /* Positive amount color */
+  --positive: oklch(0.5 0.15 150);
 
-  /* Outline & variant */
-  --md-outline: #849396;
-  --md-outline-variant: #3b494c;
-  --md-on-surface-variant: #bac9cc;
-
-  /* On-color tokens */
-  --md-on-primary: #00363d;
-  --md-on-primary-container: #00626e;
-  --md-on-tertiary: #3e2e00;
-  --md-on-tertiary-container: #6f5500;
-  --md-on-secondary: #002388;
-  --md-on-secondary-container: #c6ceff;
-  --md-on-error: #690005;
-  --md-on-error-container: #ffdad6;
-
-  /* Inverse */
-  --md-inverse-surface: #dee2f1;
-  --md-inverse-on-surface: #2c303b;
-  --md-inverse-primary: #006875;
-
-  /* Font variables */
-  --font-headline: var(--font-space-grotesk, 'Space Grotesk', sans-serif);
-  --font-body: var(--font-inter, 'Inter', sans-serif);
-
-  /* Calendar picker icon filter for dark mode */
-  --calendar-icon-filter: invert(1);
+  /* Calendar picker */
+  --calendar-icon-filter: none;
 }
 
 /* ============================================
-   2. Light Theme Override
+   2. Dark Theme Override
    ============================================ */
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
-    --md-background: #f8f9fc;
-    --md-on-surface: #1b1b1f;
-    --md-primary: #006875;
-    --md-primary-container: #9cf0ff;
-    --md-primary-fixed-dim: #00bcd4;
-    --md-secondary: #0043eb;
-    --md-secondary-container: #dce1ff;
-    --md-tertiary: #6f5500;
-    --md-tertiary-container: #ffdea6;
-    --md-tertiary-fixed-dim: #c49a00;
-    --md-error: #ba1a1a;
-    --md-error-container: #ffdad6;
-
-    --md-surface: #f8f9fc;
-    --md-surface-container-lowest: #ffffff;
-    --md-surface-container-low: #f3f3f7;
-    --md-surface-container: #eef0f4;
-    --md-surface-container-high: #e8eaee;
-    --md-surface-container-highest: #e2e4e8;
-    --md-surface-bright: #d8dae0;
-
-    --md-outline: #6f797a;
-    --md-outline-variant: #bfc8ca;
-    --md-on-surface-variant: #3f484a;
-
-    --md-on-primary: #ffffff;
-    --md-on-primary-container: #001f24;
-    --md-on-tertiary: #ffffff;
-    --md-on-tertiary-container: #231b00;
-    --md-on-secondary: #ffffff;
-    --md-on-secondary-container: #001a6e;
-    --md-on-error: #ffffff;
-    --md-on-error-container: #410002;
-
-    --md-inverse-surface: #2c303b;
-    --md-inverse-on-surface: #f0f0f7;
-    --md-inverse-primary: #4fd8eb;
-
-    --calendar-icon-filter: none;
+    --background: oklch(0.18 0.02 280);
+    --foreground: oklch(0.92 0.02 90);
+    --card: oklch(0.22 0.025 280);
+    --card-foreground: oklch(0.92 0.02 90);
+    --primary: oklch(0.7 0.15 280);
+    --primary-foreground: oklch(0.18 0.02 280);
+    --secondary: oklch(0.28 0.03 280);
+    --secondary-foreground: oklch(0.92 0.02 90);
+    --muted: oklch(0.25 0.025 280);
+    --muted-foreground: oklch(0.65 0.05 280);
+    --accent: oklch(0.3 0.035 280);
+    --accent-foreground: oklch(0.92 0.02 90);
+    --destructive: oklch(0.5 0.18 25);
+    --destructive-foreground: oklch(0.92 0.02 90);
+    --border: oklch(0.7 0.15 280);
+    --input: oklch(0.7 0.15 280);
+    --ring: oklch(0.7 0.15 280);
+    --positive: oklch(0.65 0.15 150);
+    --calendar-icon-filter: invert(1);
   }
 }
 
@@ -106,73 +62,59 @@
    3. Tailwind CSS 4 Theme Mapping
    ============================================ */
 @theme inline {
-  --font-sans: var(--font-body);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-ibm-plex-mono, 'IBM Plex Mono', 'Courier New', monospace);
+  --font-mono: var(--font-ibm-plex-mono, 'IBM Plex Mono', 'Courier New', monospace);
 
-  --color-md-background: var(--md-background);
-  --color-md-on-surface: var(--md-on-surface);
-  --color-md-primary: var(--md-primary);
-  --color-md-primary-container: var(--md-primary-container);
-  --color-md-primary-fixed-dim: var(--md-primary-fixed-dim);
-  --color-md-secondary: var(--md-secondary);
-  --color-md-secondary-container: var(--md-secondary-container);
-  --color-md-tertiary: var(--md-tertiary);
-  --color-md-tertiary-container: var(--md-tertiary-container);
-  --color-md-tertiary-fixed-dim: var(--md-tertiary-fixed-dim);
-  --color-md-error: var(--md-error);
-  --color-md-error-container: var(--md-error-container);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-positive: var(--positive);
 
-  --color-md-surface: var(--md-surface);
-  --color-md-surface-container-lowest: var(--md-surface-container-lowest);
-  --color-md-surface-container-low: var(--md-surface-container-low);
-  --color-md-surface-container: var(--md-surface-container);
-  --color-md-surface-container-high: var(--md-surface-container-high);
-  --color-md-surface-container-highest: var(--md-surface-container-highest);
-  --color-md-surface-bright: var(--md-surface-bright);
-
-  --color-md-outline: var(--md-outline);
-  --color-md-outline-variant: var(--md-outline-variant);
-  --color-md-on-surface-variant: var(--md-on-surface-variant);
-
-  --color-md-on-primary: var(--md-on-primary);
-  --color-md-on-primary-container: var(--md-on-primary-container);
-  --color-md-on-tertiary: var(--md-on-tertiary);
-  --color-md-on-tertiary-container: var(--md-on-tertiary-container);
-  --color-md-on-secondary: var(--md-on-secondary);
-  --color-md-on-secondary-container: var(--md-on-secondary-container);
-  --color-md-on-error: var(--md-on-error);
-  --color-md-on-error-container: var(--md-on-error-container);
-
-  --color-md-inverse-surface: var(--md-inverse-surface);
-  --color-md-inverse-on-surface: var(--md-inverse-on-surface);
-  --color-md-inverse-primary: var(--md-inverse-primary);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
 /* ============================================
    4. Base Styles
    ============================================ */
 body {
-  background: var(--md-background);
-  color: var(--md-on-surface);
-  font-family: var(--font-body);
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
 }
 
-/* Form elements */
-input,
-select,
-textarea {
-  color: var(--md-on-surface);
-  background-color: var(--md-surface-container);
-  border-color: var(--md-outline-variant);
+* {
+  border-color: var(--border);
 }
 
-/* Date / month / time picker fixes */
+input, select, textarea {
+  color: var(--foreground);
+  background-color: var(--card);
+  border-color: var(--border);
+}
+
 input[type="date"],
 input[type="month"],
 input[type="time"],
 input[type="datetime-local"] {
-  color: var(--md-on-surface);
-  background-color: var(--md-surface-container);
+  color: var(--foreground);
+  background-color: var(--card);
   appearance: none;
   -webkit-appearance: none;
 }
@@ -188,82 +130,44 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
    5. Utility Classes
    ============================================ */
 
-/* Glass Card */
-.glass-card {
-  background: rgba(48, 53, 64, 0.4);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 1rem;
-  border: 1px solid rgba(59, 73, 76, 0.05);
-}
-
-/* Kinetic Glow */
-.kinetic-glow {
-  box-shadow: 0px 20px 40px rgba(0, 218, 243, 0.08);
+/* Card with border — brutalist style */
+.brutalist-card {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
 }
 
 /* Slow spin animation for empty state */
 @keyframes spin-slow {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .animate-spin-slow {
   animation: spin-slow 12s linear infinite;
 }
 
-/* Primary gradient */
-.primary-gradient {
-  background: linear-gradient(135deg, #c3f5ff 0%, #00e5ff 100%);
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
 }
-
-/* Text glow */
-.text-glow {
-  text-shadow: 0 0 15px rgba(195, 245, 255, 0.3);
+::-webkit-scrollbar-track {
+  background: var(--muted);
 }
-
-/* ============================================
-   6. Progressive Enhancement
-   ============================================ */
-@supports (backdrop-filter: blur(20px)) {
-  .glass-card {
-    background: rgba(48, 53, 64, 0.4);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-  }
-}
-
-@supports not (backdrop-filter: blur(20px)) {
-  .glass-card {
-    background: var(--md-surface-container-highest);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 2px;
 }
 
 /* ============================================
-   7. Reduced Motion
+   6. Reduced Motion
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
   .animate-spin-slow {
     animation: none;
   }
-
-  .kinetic-glow {
-    box-shadow: none;
-  }
-
-  .text-glow {
-    text-shadow: none;
-  }
-
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

@@ -1,21 +1,13 @@
-import type { Metadata } from 'next';
-import { Space_Grotesk, Inter } from 'next/font/google';
+import type { Metadata, Viewport } from 'next';
+import { IBM_Plex_Mono } from 'next/font/google';
 import { Wallet, LayoutGrid } from 'lucide-react';
 import BottomNav from './components/BottomNav';
 import './globals.css';
 
-/* ── Task 2.1: Font Loading ── */
-const spaceGrotesk = Space_Grotesk({
+const ibmPlexMono = IBM_Plex_Mono({
   subsets: ['latin'],
-  variable: '--font-space-grotesk',
-  weight: ['300', '400', '500', '600', '700'],
-  display: 'swap',
-});
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  weight: ['300', '400', '500', '600'],
+  variable: '--font-ibm-plex-mono',
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
 });
 
@@ -25,12 +17,20 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
-    statusBarStyle: 'black-translucent',
+    statusBarStyle: 'default',
     title: '私人秘書',
   },
   other: {
     'mobile-web-app-capable': 'yes',
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#6366f1',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({
@@ -39,30 +39,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="zh-Hant" className={`${spaceGrotesk.variable} ${inter.variable}`}>
+    <html lang="zh-Hant" className={ibmPlexMono.variable}>
       <head>
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <meta name="theme-color" content="#0e131d" />
       </head>
-      <body className="bg-md-background text-md-on-surface min-h-screen">
-        {/* Task 2.4: Background decorative blur circles */}
-        <div className="fixed pointer-events-none -z-10 inset-0 overflow-hidden">
-          <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-md-primary-container/20 blur-[120px] opacity-20" />
-          <div className="absolute -bottom-32 -right-32 w-80 h-80 rounded-full bg-md-secondary-container/20 blur-[100px] opacity-20" />
-        </div>
-
-        {/* Task 2.2: Sticky Top App Bar */}
-        <header className="sticky top-0 z-50 bg-md-background/80 backdrop-blur-md border-b border-md-outline-variant/10">
-          <div className="max-w-4xl mx-auto flex items-center gap-3 px-4 py-3">
-            <Wallet className="w-6 h-6 text-md-primary" />
-            <h1 className="font-[family-name:var(--font-headline)] text-lg font-semibold tracking-tight text-md-on-surface flex-1">
-              私人秘書
-            </h1>
+      <body className="bg-background text-foreground font-mono antialiased min-h-screen">
+        {/* Sticky Top App Bar */}
+        <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-sm border-b-2 border-primary/30">
+          <div className="max-w-md mx-auto flex items-center gap-3 px-4 py-3">
+            <Wallet className="w-5 h-5 text-primary" />
+            <h1 className="text-lg font-bold text-foreground flex-1">私人秘書</h1>
             <a
               href="/monthly"
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-md-surface-container-highest text-md-on-surface transition-colors hover:bg-md-surface-container-high"
+              className="flex items-center justify-center w-9 h-9 rounded-md border-2 border-primary text-primary transition-colors hover:bg-accent"
             >
-              <LayoutGrid className="w-5 h-5" />
+              <LayoutGrid className="w-4 h-4" />
             </a>
           </div>
         </header>
@@ -70,7 +61,7 @@ export default function RootLayout({
         {/* Main content with bottom nav clearance */}
         <div className="pb-24">{children}</div>
 
-        {/* Task 2.3: Bottom Navigation Bar (client component) */}
+        {/* Bottom Navigation Bar */}
         <BottomNav />
       </body>
     </html>

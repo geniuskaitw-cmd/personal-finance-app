@@ -20,8 +20,8 @@ export default function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-md-background/95 backdrop-blur-xl border-t border-md-outline-variant/10 px-4 py-3">
-      <div className="max-w-4xl mx-auto flex items-center justify-around">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-t-2 border-primary/30 px-4 py-3">
+      <div className="max-w-md mx-auto flex items-center justify-around">
         {navItems.map((item) => {
           const isActive =
             pathname === item.href ||
@@ -34,21 +34,17 @@ export default function BottomNav() {
               className="flex flex-col items-center gap-1 group"
             >
               <div
-                className={`px-5 py-1 rounded-full transition-all ${
+                className={`px-4 py-1 rounded-md transition-all ${
                   isActive
-                    ? 'bg-md-primary/10 text-md-primary'
-                    : 'text-md-on-surface-variant group-hover:bg-md-surface-container-highest'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground group-hover:bg-accent'
                 }`}
               >
-                <div className="w-5 h-5">
-                  <Icon className="w-5 h-5" />
-                </div>
+                <Icon className="w-5 h-5" />
               </div>
               <span
-                className={`text-[10px] font-medium ${
-                  isActive
-                    ? 'text-md-primary'
-                    : 'text-md-on-surface-variant'
+                className={`text-[10px] font-medium uppercase tracking-wider ${
+                  isActive ? 'text-primary' : 'text-muted-foreground'
                 }`}
               >
                 {item.label}
