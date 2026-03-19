@@ -5,20 +5,20 @@ import { supabase } from '@/lib/supabase';
 import {
   ChevronLeft, ChevronRight, PieChart, TrendingUp, X,
   Car, Utensils, ShoppingBag, Gamepad2, Stethoscope, GraduationCap,
-  Home, Lamp, Wifi, Plane, Shirt, Gift, Coins,
+  Home, Lamp, Wifi, Plane, Shirt, Coins,
   Calendar as CalendarIcon,
 } from 'lucide-react';
 
 const CATEGORIES = [
   '餐飲食品', '交通', '日用品', '娛樂', '醫療', '教育',
-  '住房', '水電瓦斯', '電信網路', '旅遊', '服飾美妝', '送費',
+  '住房', '水電瓦斯', '電信網路', '旅遊', '服飾美妝',
 ];
 
 const CATEGORY_COLORS: Record<string, string> = {
   '餐飲食品': '#F87171', '交通': '#60A5FA', '日用品': '#34D399',
   '娛樂': '#FBBF24', '醫療': '#A78BFA', '教育': '#F472B6',
   '住房': '#818CF8', '水電瓦斯': '#FCD34D', '電信網路': '#6EE7B7',
-  '旅遊': '#38BDF8', '服飾美妝': '#C084FC', '送費': '#9CA3AF',
+  '旅遊': '#38BDF8', '服飾美妝': '#C084FC',
   '雜費': '#78716C', 'default': '#CBD5E1',
 };
 
@@ -38,7 +38,6 @@ function CategoryIcon({ category, className }: { category: string; className?: s
     case '電信網路': return <Wifi {...props} />;
     case '旅遊': return <Plane {...props} />;
     case '服飾美妝': return <Shirt {...props} />;
-    case '送費': return <Gift {...props} />;
     case '雜費': return <Coins {...props} />;
     default: return <Coins {...props} />;
   }

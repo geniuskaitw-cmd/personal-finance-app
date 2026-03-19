@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import {
   Car, Utensils, ShoppingBag, Gamepad2, Stethoscope, GraduationCap,
-  Home, Lamp, Wifi, Plane, Shirt, Gift, Coins,
+  Home, Lamp, Wifi, Plane, Shirt, Coins,
   ChevronLeft, ChevronRight, MoreVertical, Edit, Trash2, X, Check, BarChart3,
 } from 'lucide-react';
 
@@ -26,7 +26,7 @@ const NAME_MAP_KEY = 'finance_user_name_map';
 
 const CATEGORIES = [
   '餐飲食品', '交通', '日用品', '娛樂', '醫療', '教育',
-  '住房', '水電瓦斯', '電信網路', '旅遊', '服飾美妝', '送費', '雜費',
+  '住房', '水電瓦斯', '電信網路', '旅遊', '服飾美妝', '雜費',
 ];
 
 function getToday() {
@@ -83,7 +83,6 @@ function CategoryIcon({ category, className }: { category: string; className?: s
     case '電信網路': return <Wifi {...props} />;
     case '旅遊': return <Plane {...props} />;
     case '服飾美妝': return <Shirt {...props} />;
-    case '送費': return <Gift {...props} />;
     case '雜費': return <Coins {...props} />;
     default: return <Coins {...props} />;
   }
@@ -308,7 +307,7 @@ function TodayPageContent() {
 
       {/* Action menu */}
       {showActionMenu && actionItem && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={closeAllModals}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={closeAllModals}>
           <div className="w-full max-w-sm brutalist-card overflow-hidden shadow-xl" onClick={e => e.stopPropagation()}>
             <div className="p-4 border-b-2 border-primary/30 text-center font-bold text-foreground">選擇操作</div>
             <div className="flex flex-col">
