@@ -342,8 +342,8 @@ function TodayPageContent() {
 
       {/* Edit modal */}
       {showEditModal && actionItem && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm sm:p-6">
-          <div className="w-full max-w-md sm:rounded-md rounded-t-md p-5 shadow-xl max-h-[70vh] sm:max-h-none flex flex-col brutalist-card">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-6">
+          <div className="w-full max-w-md rounded-md p-5 shadow-xl max-h-[80vh] flex flex-col brutalist-card">
             <div className="flex justify-between items-center mb-5">
               <h3 className="text-xl font-bold text-foreground">編輯記帳</h3>
               <button onClick={closeAllModals} className="p-1 rounded-md text-muted-foreground"><X className="w-6 h-6" /></button>
